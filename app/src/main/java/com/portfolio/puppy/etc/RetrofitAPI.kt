@@ -16,6 +16,8 @@ interface RetrofitAPI {
     fun signUp(
             @Field("USEREMAIL") userEmail: String,
             @Field("USERPW") UserPw: String,
+            @Field("USERIMAGE") UserImage: String,
+            @Field("USERNAME") UserName: String,
     ): Call<String>
 
     // 로그인
@@ -28,8 +30,24 @@ interface RetrofitAPI {
 
     // 이메일 중복 체크
     @FormUrlEncoded
-    @POST("validate.php")
-    fun validate(
+    @POST("validateEmail.php")
+    fun validateEmail(
             @Field("USEREMAIL") userEmail: String,
+    ): Call<String>
+
+    // 닉네임 중복 체크
+    @FormUrlEncoded
+    @POST("validateName.php")
+    fun validateName(
+        @Field("USERNAME") userName: String,
+    ): Call<String>
+
+    // 프로필 정보 변경
+    @FormUrlEncoded
+    @POST("editProfile.php")
+    fun editProfile(
+        @Field("USEREMAIL") userEmail: String,
+        @Field("USERIMAGE") userImage: String,
+        @Field("USERNAME") userName: String
     ): Call<String>
 }

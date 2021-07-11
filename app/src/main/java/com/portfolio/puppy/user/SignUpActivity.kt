@@ -57,11 +57,12 @@ class SignUpActivity : AppCompatActivity() {
         mViewModel.mIsSuccess.observe(this, {
             if (it) {
                 // 메인 화면으로 이동
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, EditProfile::class.java)
+                intent.putExtra("userEmail", email.text.toString())
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 startActivity(intent)
-            }
-            else {
+
+            } else {
                 mBinding.progressBarSignUp.visibility = View.INVISIBLE
             }
         })

@@ -12,7 +12,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.portfolio.puppy.R
 import com.portfolio.puppy.databinding.ActivitySignInBinding
+import com.portfolio.puppy.etc.PreferencesAPI
 import com.portfolio.puppy.main.MainActivity
+import java.util.prefs.Preferences
 
 class SignInActivity : AppCompatActivity() {
     private lateinit var mViewModel: UserViewModel
@@ -32,6 +34,11 @@ class SignInActivity : AppCompatActivity() {
 
         val email = mBinding.inputLayoutSignInEmail.editText!!
         val pw = mBinding.inputLayoutSignInPw.editText!!
+
+        mBinding.buttonTest.setOnClickListener {
+            val intent = Intent(this, EditProfile::class.java)
+            startActivity(intent)
+        }
 
         // 로그인
         mBinding.buttonSignIn.setOnClickListener {
@@ -62,6 +69,8 @@ class SignInActivity : AppCompatActivity() {
         mViewModel.mIsSuccess = MutableLiveData()
         mViewModel.mIsSuccess.observe(this, {
             if (it) {
+                PreferencesAPI(this).putEmailAndPw(email.text.toString(), pw.text.toString())
+
                 val intent = Intent(this, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 startActivity(intent)
@@ -97,6 +106,5 @@ class SignInActivity : AppCompatActivity() {
                 mBinding.inputLayoutSignInPw.error = null
             }
         }
-
     }
 }

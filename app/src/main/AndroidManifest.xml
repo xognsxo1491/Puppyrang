@@ -14,14 +14,17 @@
         android:theme="@style/Theme.Puppy"
         android:usesCleartextTraffic="true">
 
+        <activity android:name=".user.EditProfile" />
+        <activity android:name=".user.SignUpActivity" />
+        <activity android:name=".main.MainActivity" />
+        <activity android:name=".user.SignInActivity" />
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-6367380051833430~4827827565" />
 
-        <activity android:name=".user.SignUpActivity" />
-        <activity android:name=".main.MainActivity" />
 
-        <activity android:name=".user.SignInActivity">
+        <activity android:name=".user.SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

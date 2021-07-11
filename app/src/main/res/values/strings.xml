@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">퍼피랑</string>
+    <string name="app_name">위피드</string>
+    <string name="app_name_eng">With Puppy</string>
 
     <!-- BottomNavigationView -->
     <string name="none">무제</string>
@@ -12,6 +13,12 @@
     <string name="more">더보기</string>
     <string name="dashboard_free">자유 게시판</string>
 
+    <string name="error_name">이미 사용중인 닉네임입니다.</string>
+    <string name="success_signUp">회원가입에 성공하였습니다.</string>
+    <string name="success_editProfile">프로필 정보가 변경되었습니다.</string>
+    <string name="submit">제출</string>
+    <string name="name">닉네임</string>
+    <string name="edit_profile">프로필 설정</string>
     <string name="error_signIn">회원정보가 일치하지 않습니다.</string>
     <string name="error_blank">해당란이 공백입니다.</string>
     <string name="signIn">로그인</string>
@@ -21,6 +28,7 @@
     <string name="pw_certification">비밀번호 확인</string>
     <string name="email_error">이메일 형식을 확인해주세요.</string>
     <string name="pw_error">길이는 8~16자로, 최소 하나의 문자, 숫자, 특수문자를 포함해주세요.</string>
+    <string name="nickName_error">2~8자 사이로 지어주세요.</string>
     <string name="pw_validate">이미 사용중인 이메일입니다.</string>
     <string name="pwCertificaton_error">비밀번호가 일치하지 않습니다.</string>
 

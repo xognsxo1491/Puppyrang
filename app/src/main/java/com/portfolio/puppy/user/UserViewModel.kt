@@ -49,6 +49,28 @@ class UserViewModel : ViewModel() {
         disposable.add(data)
     }
 
+    fun validateName(name: String) {
+        val data = UserDataSource().validateName(name)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                mIsValidate.value = it.equals("validate false")
+            }, {})
+
+        disposable.add(data)
+    }
+
+    fun editProfile(email: String, image: String, name: String) {
+        val data = UserDataSource().editProfile(email, image, name)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                mIsSuccess.value = it.equals("editProfile true")
+            }, {})
+
+        disposable.add(data)
+    }
+
     override fun onCleared() {
         super.onCleared()
         disposable.clear()

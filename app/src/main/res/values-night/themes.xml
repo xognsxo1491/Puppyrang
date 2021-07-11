@@ -3,9 +3,9 @@
     <style name="Theme.Puppy" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/color_blue</item>
-        <item name="colorPrimaryVariant">@color/color_purple</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/color_pink</item>
+        <item name="colorPrimaryVariant">@color/color_dark</item>
+        <item name="colorOnPrimary">@color/color_dark</item>
 
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -13,7 +13,7 @@
         <item name="colorOnSecondary">@color/white</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/color_dark</item>
 
         <!-- Customize your theme here. -->
     </style>

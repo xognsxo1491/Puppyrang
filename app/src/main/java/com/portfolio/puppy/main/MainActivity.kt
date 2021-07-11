@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -30,6 +31,12 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         setBottomNavClickListener()
+
+        when (intent.getStringExtra("value")) {
+            "editProfile" -> {
+                Toast.makeText(this, getString(R.string.success_editProfile), Toast.LENGTH_LONG).show()
+            }
+        }
 
         // BottomNav Fragment 상태 변화 감지
         mViewModel.fragmentStatus.observe(this, {
