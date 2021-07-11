@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">퍼피랑</string>
+
+    <!-- BottomNavigationView -->
+    <string name="none">무제</string>
+    <string name="navigation_home">Home</string>
+    <string name="navigation_community">Community</string>
+    <string name="navigation_notification">Notification</string>
+    <string name="common_sense">알아두면 좋은 상식</string>
+    <string name="popular_pet">인기 댕댕이</string>
+    <string name="find_pet">강아지를 찾습니다</string>
+    <string name="more">더보기</string>
+    <string name="dashboard_free">자유 게시판</string>
+
+    <string name="error_signIn">회원정보가 일치하지 않습니다.</string>
+    <string name="error_blank">해당란이 공백입니다.</string>
+    <string name="signIn">로그인</string>
+    <string name="signUp">회원가입</string>
+    <string name="email">이메일</string>
+    <string name="pw">비밀번호</string>
+    <string name="pw_certification">비밀번호 확인</string>
+    <string name="email_error">이메일 형식을 확인해주세요.</string>
+    <string name="pw_error">길이는 8~16자로, 최소 하나의 문자, 숫자, 특수문자를 포함해주세요.</string>
+    <string name="pw_validate">이미 사용중인 이메일입니다.</string>
+    <string name="pwCertificaton_error">비밀번호가 일치하지 않습니다.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

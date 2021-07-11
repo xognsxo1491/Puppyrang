@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_blue">#519CF2</color>
+    <color name="color_sky">#8DA1FE</color>
+    <color name="color_purple">#C291FE</color>
+    <color name="color_gray">#BEBEBE</color>
+
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="white_245">#F5F5F5</color>
+
+</resources>
