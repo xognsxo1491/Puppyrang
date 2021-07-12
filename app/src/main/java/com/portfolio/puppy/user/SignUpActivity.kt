@@ -14,7 +14,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.portfolio.puppy.R
 import com.portfolio.puppy.databinding.ActivitySignUpBinding
-import com.portfolio.puppy.main.MainActivity
+import com.portfolio.puppy.etc.PreferencesAPI
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var mViewModel: UserViewModel
@@ -56,10 +56,10 @@ class SignUpActivity : AppCompatActivity() {
         mViewModel.mIsSuccess = MutableLiveData()
         mViewModel.mIsSuccess.observe(this, {
             if (it) {
-                // 메인 화면으로 이동
-                val intent = Intent(this, EditProfile::class.java)
-                intent.putExtra("userEmail", email.text.toString())
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                PreferencesAPI(this).putEmailAndPw(email.text.toString(), pw.text.toString())
+
+                val intent = Intent(this, EditProfileActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 startActivity(intent)
 
             } else {
@@ -122,13 +122,13 @@ class SignUpActivity : AppCompatActivity() {
             if (this::mPw.isInitialized) {
                 if (pwCertification.text.toString() != mPw.toString()) {
                     mIsPwCertification = false
-                    mBinding.inputLayoutSignUpPwCertification.error = getString(R.string.pwCertificaton_error)
+                    mBinding.inputLayoutSignUpPwCertification.error = getString(R.string.pw_certification_error)
                 } else {
                     mIsPwCertification = true
                     mBinding.inputLayoutSignUpPwCertification.error = null
                 }
             } else {
-                mBinding.inputLayoutSignUpPwCertification.error = getString(R.string.pwCertificaton_error)
+                mBinding.inputLayoutSignUpPwCertification.error = getString(R.string.pw_certification_error)
             }
 
             isClickable()

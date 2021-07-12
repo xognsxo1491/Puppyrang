@@ -30,6 +30,7 @@
             android:layout_gravity="end"
             android:background="?attr/colorOnPrimary"
             android:fitsSystemWindows="true"
+            app:headerLayout="@layout/item_drawer_header"
             app:itemTextColor="?attr/colorOnSecondary"
             app:menu="@menu/menu_main_drawer" />
 

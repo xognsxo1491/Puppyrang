@@ -1,5 +1,6 @@
 package com.portfolio.puppy.user
 
+import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -44,7 +45,9 @@ class UserViewModel : ViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     mIsValidate.value = it.equals("validate false")
-                }, {})
+                }, {
+                    mErrorMessage.value = "이메일 중복확인 중 오류가 발생하였습니다."
+                })
 
         disposable.add(data)
     }
@@ -55,21 +58,39 @@ class UserViewModel : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 mIsValidate.value = it.equals("validate false")
-            }, {})
+            }, {
+                mErrorMessage.value = "닉네임 중복확인 중 오류가 발생하였습니다."
+            })
 
         disposable.add(data)
     }
 
-    fun editProfile(email: String, image: String, name: String) {
-        val data = UserDataSource().editProfile(email, image, name)
+    fun changeName(email: String, name: String) {
+        val data = UserDataSource().changeName(email, name)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                mIsSuccess.value = it.equals("editProfile true")
-            }, {})
+                mIsSuccess.value = it.equals("changeName true")
+            }, {
+                mErrorMessage.value = "프로필 변경 중 오류가 발생하였습니다."
+            })
 
         disposable.add(data)
     }
+
+    fun uploadImage(email: String, bitmap: Bitmap) {
+        val data = UserDataSource().uploadImage(email, bitmap)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+
+            }, {
+                mErrorMessage.value = "이미지 업로드 중 오류가 발생하였습니다."
+            })
+
+        disposable.add(data)
+    }
+
 
     override fun onCleared() {
         super.onCleared()

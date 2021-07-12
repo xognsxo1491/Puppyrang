@@ -13,6 +13,11 @@
     <string name="more">더보기</string>
     <string name="dashboard_free">자유 게시판</string>
 
+    <string name="message">Message</string>
+    <string name="cancel">취소</string>
+    <string name="ok">확인</string>
+    <string name="message_logout">로그아웃 하시겠습니까?</string>
+    <string name="logout">로그아웃</string>
     <string name="error_name">이미 사용중인 닉네임입니다.</string>
     <string name="success_signUp">회원가입에 성공하였습니다.</string>
     <string name="success_editProfile">프로필 정보가 변경되었습니다.</string>
@@ -27,10 +32,10 @@
     <string name="pw">비밀번호</string>
     <string name="pw_certification">비밀번호 확인</string>
     <string name="email_error">이메일 형식을 확인해주세요.</string>
-    <string name="pw_error">길이는 8~16자로, 최소 하나의 문자, 숫자, 특수문자를 포함해주세요.</string>
+    <string name="pw_error">길이는 8~16자로, 최소 하나의 문자와 숫자를 포함해주세요.</string>
     <string name="nickName_error">2~8자 사이로 지어주세요.</string>
     <string name="pw_validate">이미 사용중인 이메일입니다.</string>
-    <string name="pwCertificaton_error">비밀번호가 일치하지 않습니다.</string>
+    <string name="pw_certification_error">비밀번호가 일치하지 않습니다.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

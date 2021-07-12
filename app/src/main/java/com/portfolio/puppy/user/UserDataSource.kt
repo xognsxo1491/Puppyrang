@@ -1,5 +1,7 @@
 package com.portfolio.puppy.user
 
+import android.graphics.Bitmap
+import android.util.Base64
 import android.util.Log
 import com.portfolio.puppy.etc.RetrofitAPI
 import io.reactivex.Single
@@ -9,7 +11,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import java.lang.Exception
+import java.io.ByteArrayOutputStream
+import java.util.*
 
 class UserDataSource {
 
@@ -18,7 +21,7 @@ class UserDataSource {
         val retrofit = retrofitBuilder()
         val api = retrofit.create(RetrofitAPI::class.java)
 
-        api.signUp(email, pw, "null", "null").enqueue(object : Callback<String> {
+        api.signUp(email, pw, "null", "null", "null").enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful && response.body() != null) {
                     try {
@@ -48,7 +51,7 @@ class UserDataSource {
         val retrofit = retrofitBuilder()
         val api = retrofit.create(RetrofitAPI::class.java)
 
-        api.signIn(email, pw).enqueue(object : Callback<String> {
+        api.loadUserData(email, pw).enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful && response.body() != null) {
                     try {
@@ -71,8 +74,8 @@ class UserDataSource {
                 t.printStackTrace()
             }
         })
-
     }
+
 
     // 이메일 중복 체크
     fun validateEmail(email: String) = Single.create<String> {
@@ -86,11 +89,9 @@ class UserDataSource {
                         val jsonObject = JSONObject(response.body().toString())
                         if (jsonObject.optString("result").equals("true")) {
                             it.onSuccess("validate true")
-                            Log.e("test", "validate true")
 
                         } else {
                             it.onSuccess("validate false")
-                            Log.e("test", "validate false")
                         }
 
                     } catch (e: Exception) {
@@ -119,11 +120,9 @@ class UserDataSource {
                         val jsonObject = JSONObject(response.body().toString())
                         if (jsonObject.optString("result").equals("true")) {
                             it.onSuccess("validate true")
-                            Log.e("test", "validate true")
 
                         } else {
                             it.onSuccess("validate false")
-                            Log.e("test", "validate false")
                         }
 
                     } catch (e: Exception) {
@@ -140,27 +139,58 @@ class UserDataSource {
         })
     }
 
-    // 프로필 수정
-    fun editProfile(email: String, image: String, name: String) = Single.create<String> {
+    // 프로필 이미지 업로드
+    fun uploadImage(email: String, bitmap: Bitmap) = Single.create<String> {
         val retrofit = retrofitBuilder()
         val api = retrofit.create(RetrofitAPI::class.java)
 
-        api.editProfile(email, image, name).enqueue(object : Callback<String> {
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val byteArray = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT)
+
+        val imageName = UUID.randomUUID().toString()
+
+        api.uploadImage(email, imageName, byteArray).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                Log.e("UserViewModel", "234")
+
+                val jsonObject = JSONObject(response.body().toString())
+                Log.e("UserViewModel", "123")
+
+                if (jsonObject.optString("result").equals("true")) {
+                    Log.e("UserViewModel", "uploadImage")
+                    it.onSuccess("uploadImage true")
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e("UserViewModel", "uploadImage 에러")
+                it.onError(t)
+            }
+        })
+    }
+
+    // 닉네임 변경
+    fun changeName(email: String, name: String) = Single.create<String> {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitAPI::class.java)
+
+        api.changeName(email, name).enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 try {
                     val jsonObject = JSONObject(response.body().toString())
                     if (jsonObject.optString("result").equals("true")) {
-                        it.onSuccess("editProfile true")
+                        it.onSuccess("changeName true")
                     }
 
                 } catch (e: Exception) {
-                    Log.e("UserViewModel", "editProfile 에러")
+                    Log.e("UserViewModel", "changeName 에러")
                     it.onError(e)
                 }
             }
 
             override fun onFailure(call: Call<String>, t: Throwable) {
-                Log.e("UserViewModel", "editProfile 에러")
+                Log.e("UserViewModel", "changeName 에러")
                 t.printStackTrace()
             }
         })

@@ -14,7 +14,6 @@ import com.portfolio.puppy.R
 import com.portfolio.puppy.databinding.ActivitySignInBinding
 import com.portfolio.puppy.etc.PreferencesAPI
 import com.portfolio.puppy.main.MainActivity
-import java.util.prefs.Preferences
 
 class SignInActivity : AppCompatActivity() {
     private lateinit var mViewModel: UserViewModel
@@ -36,7 +35,7 @@ class SignInActivity : AppCompatActivity() {
         val pw = mBinding.inputLayoutSignInPw.editText!!
 
         mBinding.buttonTest.setOnClickListener {
-            val intent = Intent(this, EditProfile::class.java)
+            val intent = Intent(this, EditProfileActivity::class.java)
             startActivity(intent)
         }
 
@@ -72,7 +71,7 @@ class SignInActivity : AppCompatActivity() {
                 PreferencesAPI(this).putEmailAndPw(email.text.toString(), pw.text.toString())
 
                 val intent = Intent(this, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 startActivity(intent)
 
             } else {

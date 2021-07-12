@@ -1,10 +1,16 @@
 package com.portfolio.puppy.main
 
+import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -12,7 +18,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.portfolio.puppy.*
 import com.portfolio.puppy.dashboard.DashBoardFragment
 import com.portfolio.puppy.databinding.DrawerMainBinding
+import com.portfolio.puppy.etc.PreferencesAPI
 import com.portfolio.puppy.home.HomeFragment
+import com.portfolio.puppy.user.EditProfileActivity
+import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mViewModel: MainViewModel
@@ -27,8 +36,19 @@ class MainActivity : AppCompatActivity() {
         mBinding.viewModel = mViewModel
         mBinding.lifecycleOwner = this
 
-        val toolbar: androidx.appcompat.widget.Toolbar = mBinding.includeMain.toolbarMain
+        val toolbar = mBinding.includeMain.toolbarMain
         setSupportActionBar(toolbar)
+
+        val email = PreferencesAPI(this).getEmail()
+        val name = PreferencesAPI(this).getName()
+
+        val navView = mBinding.navView.getHeaderView(0)
+        val navEmail = navView.findViewById<TextView>(R.id.textView_drawer_email)
+        val navName = navView.findViewById<TextView>(R.id.textView_drawer_name)
+        val navProfile = navView.findViewById<ImageView>(R.id.image_drawer_profile)
+
+        navEmail.text = email
+        navName.text = name
 
         setBottomNavClickListener()
 
@@ -57,6 +77,33 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+
+        mViewModel.mUri.observe(this, {
+            if (!it.equals("")) {
+                navProfile.setImageURI(Uri.parse(it))
+            }
+        })
+
+        mBinding.navView.setNavigationItemSelectedListener { it ->
+            when (it.itemId) {
+                R.id.navigation_logout -> {
+                    showDialogLogout()
+                    true
+                }
+
+                R.id.navigation_editProfile -> {
+                    val intent = Intent(this, EditProfileActivity::class.java)
+                    intent.putExtra("value", "main")
+                    startActivity(intent)
+
+                    true
+                }
+
+                else -> {
+                    false
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -107,12 +154,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // 로그아웃 다이얼로그
+    private fun showDialogLogout() {
+        val builder = AlertDialog.Builder(this)
+                .setTitle(getString(R.string.message))
+                .setMessage(getString(R.string.message_logout))
+                .setPositiveButton(getString(R.string.ok)) { dialog: DialogInterface, i: Int ->
+                    PreferencesAPI(this).logout()
+
+                    finishAffinity()
+                    exitProcess(0)
+                }.setNegativeButton(getString(R.string.cancel)) { dialog: DialogInterface, i: Int ->
+
+                }
+        val dlg = builder.create()
+        dlg.show()
+    }
+
     override fun onBackPressed() {
         if (mBinding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
             mBinding.drawerLayout.closeDrawer(GravityCompat.END)
-        } else {
-            super.onBackPressed()
-        }
 
+        } else {
+            finishAffinity()
+            exitProcess(0)
+        }
     }
 }

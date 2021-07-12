@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white_245"
-        tools:context=".user.EditProfile">
+        tools:context=".user.EditProfileActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout2"
@@ -64,24 +64,36 @@
             android:layout_marginTop="100dp"
             android:shape="ring"
             app:cardCornerRadius="75dp"
-            app:cardElevation="0dp"
+            app:cardElevation="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="32dp"
-                app:srcCompat="@drawable/ic_photo_library_24"
-                tools:ignore="ContentDescription" />
+            <androidx.cardview.widget.CardView
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_gravity="center"
+                android:shape="ring"
+                app:cardBackgroundColor="@color/white_245"
+                app:cardCornerRadius="75dp"
+                app:cardElevation="0dp">
+
+                <ImageView
+                    android:id="@+id/image_editProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    tools:ignore="ContentDescription" />
+
+            </androidx.cardview.widget.CardView>
+
 
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:layout_width="64dp"
             android:layout_height="64dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="98dp"
             android:shape="ring"
             app:cardCornerRadius="75dp"
             app:cardElevation="8dp"
@@ -92,12 +104,23 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.74">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="16dp"
-                app:srcCompat="@drawable/ic_add_24"
-                tools:ignore="ContentDescription" />
+            <androidx.cardview.widget.CardView
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_gravity="center"
+                android:shape="ring"
+                app:cardBackgroundColor="@color/white_245"
+                app:cardCornerRadius="75dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp"
+                    app:srcCompat="@drawable/ic_add_24"
+                    tools:ignore="ContentDescription" />
+
+            </androidx.cardview.widget.CardView>
+
         </androidx.cardview.widget.CardView>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -106,7 +129,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="40dp"
             android:layout_marginEnd="32dp"
             android:hint="@string/name"
             android:textColorHint="@color/color_gray"
