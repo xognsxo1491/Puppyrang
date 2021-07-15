@@ -3,13 +3,13 @@
     <style name="Theme.Puppy" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/color_pink</item>
+        <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryVariant">@color/color_dark</item>
         <item name="colorOnPrimary">@color/color_dark</item>
 
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/color_dark_deep</item>
         <item name="colorOnSecondary">@color/white</item>
 
         <!-- Status bar color. -->

@@ -3,8 +3,8 @@
     <style name="Theme.Puppy" parent="Theme.MaterialComponents.NoActionBar">
 
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/color_pink</item>
-        <item name="colorPrimaryVariant">@color/color_pink</item>
+        <item name="colorPrimary">@color/color_dark</item>
+        <item name="colorPrimaryVariant">@color/color_dark_deep</item>
         <item name="colorOnPrimary">@color/white</item>
 
         <!-- Secondary brand color. -->

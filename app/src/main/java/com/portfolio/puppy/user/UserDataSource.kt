@@ -3,7 +3,9 @@ package com.portfolio.puppy.user
 import android.graphics.Bitmap
 import android.util.Base64
 import android.util.Log
+import com.portfolio.puppy.etc.EmailAPI
 import com.portfolio.puppy.etc.RetrofitAPI
+import io.reactivex.Completable
 import io.reactivex.Single
 import org.json.JSONObject
 import retrofit2.Call
@@ -13,6 +15,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.ByteArrayOutputStream
 import java.util.*
+import javax.mail.MessagingException
+import javax.mail.SendFailedException
 
 class UserDataSource {
 
@@ -21,7 +25,7 @@ class UserDataSource {
         val retrofit = retrofitBuilder()
         val api = retrofit.create(RetrofitAPI::class.java)
 
-        api.signUp(email, pw, "null", "null", "null").enqueue(object : Callback<String> {
+        api.signUp(email, pw, "null", "null", false, 0).enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful && response.body() != null) {
                     try {
@@ -42,6 +46,7 @@ class UserDataSource {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 Log.e("UserViewModel", "SignUp 에러")
                 t.printStackTrace()
+                it.onError(t)
             }
         })
     }
@@ -57,7 +62,7 @@ class UserDataSource {
                     try {
                         val jsonObject = JSONObject(response.body().toString())
                         if (jsonObject.optString("result").equals("true")) {
-                            it.onSuccess("SignIn Succeed")
+                            it.onSuccess(jsonObject.optString("userAuth"))
                         } else {
                             it.onSuccess("SignIn Failed")
                         }
@@ -72,6 +77,7 @@ class UserDataSource {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 Log.e("UserViewModel", "SignIn 에러")
                 t.printStackTrace()
+                it.onError(t)
             }
         })
     }
@@ -104,6 +110,7 @@ class UserDataSource {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 Log.e("UserViewModel", "validate 에러")
                 t.printStackTrace()
+                it.onError(t)
             }
         })
     }
@@ -135,12 +142,13 @@ class UserDataSource {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 Log.e("UserViewModel", "validate 에러")
                 t.printStackTrace()
+                it.onError(t)
             }
         })
     }
 
     // 프로필 이미지 업로드
-    fun uploadImage(email: String, bitmap: Bitmap) = Single.create<String> {
+    fun uploadUserImage(email: String, bitmap: Bitmap, imageName: String) = Single.create<String> {
         val retrofit = retrofitBuilder()
         val api = retrofit.create(RetrofitAPI::class.java)
 
@@ -148,23 +156,78 @@ class UserDataSource {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val byteArray = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT)
 
-        val imageName = UUID.randomUUID().toString()
-
-        api.uploadImage(email, imageName, byteArray).enqueue(object : Callback<String> {
+        api.uploadUserImage(email, imageName, byteArray).enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
-                Log.e("UserViewModel", "234")
-
                 val jsonObject = JSONObject(response.body().toString())
-                Log.e("UserViewModel", "123")
 
                 if (jsonObject.optString("result").equals("true")) {
-                    Log.e("UserViewModel", "uploadImage")
                     it.onSuccess("uploadImage true")
                 }
             }
 
             override fun onFailure(call: Call<String>, t: Throwable) {
                 Log.e("UserViewModel", "uploadImage 에러")
+                it.onError(t)
+                it.onError(t)
+            }
+        })
+    }
+
+    // 프로필 이미지 불러오기
+    fun loadUserImage(email: String) = Single.create<String> {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitAPI::class.java)
+
+        api.loadUserImage(email).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful && response.body() != null) {
+                    try {
+                        val jsonObject = JSONObject(response.body().toString())
+                        if (jsonObject.optString("result").equals("true")) {
+                            if (!jsonObject.optString("userImage").equals("null")) {
+                                it.onSuccess(jsonObject.optString("userImage"))
+                            }
+                        }
+
+                    } catch (e: Exception) {
+                        Log.e("UserViewModel", "loadUserImage 에러")
+                        it.onError(e)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e("UserViewModel", "loadUserImage 에러")
+                t.printStackTrace()
+                it.onError(t)
+            }
+        })
+    }
+
+    // 프로필 이미지 삭제
+    fun deleteUserImage(email: String, image: String) = Completable.create {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitAPI::class.java)
+
+        api.deleteUserImage(email, image).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful && response.body() != null) {
+                    try {
+                        val jsonObject = JSONObject(response.body().toString())
+                        if (jsonObject.optString("result").equals("true")) {
+                            it.onComplete()
+                        }
+
+                    } catch (e: Exception) {
+                        Log.e("UserViewModel", "deleteUserImage 에러")
+                        it.onError(e)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e("UserViewModel", "deleteUserImage 에러")
+                t.printStackTrace()
                 it.onError(t)
             }
         })
@@ -192,14 +255,56 @@ class UserDataSource {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 Log.e("UserViewModel", "changeName 에러")
                 t.printStackTrace()
+                it.onError(t)
+            }
+        })
+    }
+
+    // 이메일 전송
+    fun sendEmail(title: String, code: String, dest: String) = Completable.create {
+        try {
+            EmailAPI().sendEmail(title, code, dest)
+            it.onComplete()
+
+        } catch (e: Exception) {
+            it.onError(e)
+        }
+    }
+
+    fun changeAuth(email: String) = Single.create<Boolean> {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitAPI::class.java)
+
+        api.changeAuth(email).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                try {
+                    val jsonObject = JSONObject(response.body().toString())
+                    if (jsonObject.optString("result").equals("true")) {
+                        it.onSuccess(true)
+
+                    } else {
+                        Log.e("UserViewModel", "changeAuth 에러")
+                        it.onSuccess(false)
+                    }
+
+                } catch (e: Exception) {
+                    Log.e("UserViewModel", "changeAuth 에러")
+                    it.onError(e)
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e("UserViewModel", "changeAuth 에러")
+                t.printStackTrace()
+                it.onError(t)
             }
         })
     }
 
     private fun retrofitBuilder(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(RetrofitAPI.URL)
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build()
+                .baseUrl(RetrofitAPI.URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build()
     }
 }

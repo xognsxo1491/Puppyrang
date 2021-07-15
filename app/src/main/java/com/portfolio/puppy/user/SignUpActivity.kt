@@ -3,6 +3,7 @@ package com.portfolio.puppy.user
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -56,7 +57,7 @@ class SignUpActivity : AppCompatActivity() {
         mViewModel.mIsSuccess = MutableLiveData()
         mViewModel.mIsSuccess.observe(this, {
             if (it) {
-                PreferencesAPI(this).putEmailAndPw(email.text.toString(), pw.text.toString())
+                PreferencesAPI(this).putUserData(email.text.toString(), pw.text.toString(), false)
 
                 val intent = Intent(this, EditProfileActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)

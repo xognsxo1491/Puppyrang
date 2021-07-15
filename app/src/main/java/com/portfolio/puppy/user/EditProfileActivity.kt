@@ -1,32 +1,35 @@
 package com.portfolio.puppy.user
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.google.android.material.snackbar.Snackbar
 import com.portfolio.puppy.R
 import com.portfolio.puppy.databinding.ActivityEditProfileBinding
 import com.portfolio.puppy.etc.ImageAPI
 import com.portfolio.puppy.etc.PreferencesAPI
 import com.portfolio.puppy.main.MainActivity
+import java.util.*
 
 class EditProfileActivity : AppCompatActivity() {
+    private val userImageUri = "https://puppyrang0222.cafe24.com/puppyrang/images/"
+
     private lateinit var mViewModel: UserViewModel
     private lateinit var mBinding: ActivityEditProfileBinding
 
-    private var mValue: String = "null"
-    private lateinit var mUri: Uri
+    private var mValue: String = "null" // 액티비티 분류값
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,43 +43,106 @@ class EditProfileActivity : AppCompatActivity() {
         setSupportActionBar(mBinding.toolbarEditProfile)
 
         val email = PreferencesAPI(this).getEmail() // 이메일
-        mValue = intent.getStringExtra("value").toString() // 닉네임
+        val name = PreferencesAPI(this).getName()
+        val nameEdit = mBinding.inputLayoutEditProfile.editText!!.text
+
+        mValue = intent.getStringExtra("value").toString()
+        mViewModel.loadUserImage(email)
 
         // 메인화면에서 넘어왔을 경우
         if (mValue == "main") {
             mBinding.toolbarEditProfile.setNavigationIcon(R.drawable.ic_close_24)
+            mBinding.textEditTitle.text = getString(R.string.change_profile)
+            nameEdit.replace(0, nameEdit.length, name)
         }
 
         // 제출 버튼 클릭 이벤트
          mBinding.textViewEditProfileSubmit.setOnClickListener {
              mBinding.progressBarEditProfile.visibility = View.VISIBLE
-             mViewModel.validateName(mBinding.inputLayoutEditProfile.editText!!.text.toString())
+             mViewModel.validateName(nameEdit.toString())
         }
+
+        mBinding.textViewEditProfileSubmit.isClickable = false
 
         // 프로필 사진 저장
         val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK && result.data != null) {
                 val intent = result.data!!
                 mBinding.imageEditProfile.setImageURI(intent.data)
-                mUri = intent.data!!
+
+                val imageName = UUID.randomUUID().toString()
+                PreferencesAPI(this).putProfileImage(imageName)
+
+                val bitmap = ImageAPI().resize(this, intent.data!!, 200)
+                mViewModel.uploadUserImage(email, bitmap, imageName)
             }
         }
 
+        // 프로필 이미지 업로드 메세지
+        mViewModel.mUploadUserImage = MutableLiveData()
+        mViewModel.mUploadUserImage.observe(this, {
+            if (it) {
+                Snackbar.make(mBinding.layoutEditProfile, getString(R.string.profileImage_upload), Snackbar.LENGTH_LONG).show()
+            }
+        })
+
+        // 프로필 이미지 삭제 메세지
+        mViewModel.mDeleteUserImage = MutableLiveData()
+        mViewModel.mDeleteUserImage.observe(this, {
+            Snackbar.make(mBinding.layoutEditProfile, getString(R.string.profileImage_delete), Snackbar.LENGTH_LONG).show()
+        })
+
+        // 프로필 이미지 로딩 메시지
+        mViewModel.mLoadUserImage = MutableLiveData()
+        mViewModel.mLoadUserImage.observe(this, {
+            Glide.with(this)
+                    .load("$userImageUri$it.jpg")
+                    .into(mBinding.imageEditProfile)
+        })
+
         // 프로필 사진 클릭 이벤트
         mBinding.imageEditProfile.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-            resultLauncher.launch(intent)
+            val items = arrayOf<CharSequence>("이미지 선택", "이미지 삭제")
+
+            if (mValue == "main") {
+                val builder = AlertDialog.Builder(this)
+                builder.setItems(items) { _, which ->
+                    when (which) {
+                        0 -> { // 이미지 선택
+                            val intent = Intent(Intent.ACTION_PICK)
+                            intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+                            resultLauncher.launch(intent)
+                        }
+                        
+                        1 -> { // 이미지 삭제
+                            mBinding.imageEditProfile.setImageDrawable(null)
+                            mViewModel.deleteUserImage(email,  PreferencesAPI(this).getProfileImage())
+                        }
+                    }
+                }.create().show()
+
+            } else {
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+                resultLauncher.launch(intent)
+            }
         }
 
         // 프로필 수정 완료 이벤트
         mViewModel.mIsSuccess = MutableLiveData()
         mViewModel.mIsSuccess.observe(this, {
             if (it) {
-                PreferencesAPI(this).putName(mBinding.inputLayoutEditProfile.editText!!.text.toString())
+                PreferencesAPI(this).putName(nameEdit.toString())
 
                 val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("value", "editProfile")
+
+                if (mValue == "main") {
+                    intent.putExtra("value", "editProfile")
+                }
+                if (mValue == "signUp") {
+                    intent.putExtra("value", "signUp")
+                }
+
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 startActivity(intent)
             }
@@ -86,17 +152,9 @@ class EditProfileActivity : AppCompatActivity() {
         mViewModel.mIsValidate = MutableLiveData()
         mViewModel.mIsValidate.observe(this, {
             if (it) {
-                if (this::mUri.isInitialized) { // 이미지 선택 시
-                    val bitmap = ImageAPI().resize(this, mUri, 200)
+                mViewModel.changeName(email, nameEdit.toString())
 
-                    mViewModel.uploadImage(email, bitmap)
-                    mViewModel.changeName(email, mBinding.inputLayoutEditProfile.editText!!.text!!.toString())
-
-                } else { // 이미지 미선택 시
-                    mViewModel.changeName(email, mBinding.inputLayoutEditProfile.editText!!.text!!.toString())
-                }
-            }
-            else {
+            } else {
                 mBinding.progressBarEditProfile.visibility = View.INVISIBLE
                 mBinding.inputLayoutEditProfile.error = getString(R.string.error_name)
             }

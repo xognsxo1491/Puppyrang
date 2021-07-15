@@ -3,6 +3,7 @@
     package="com.portfolio.puppy">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -14,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Puppy"
         android:usesCleartextTraffic="true">
-
+        <activity android:name=".user.EmailAuthActivity" />
         <activity android:name=".user.EditProfileActivity" />
         <activity android:name=".user.SignUpActivity" />
         <activity android:name=".main.MainActivity" />
@@ -24,15 +25,13 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-6367380051833430~4827827565" />
 
-
-        <activity android:name=".user.SplashActivity" >
+        <activity android:name=".user.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

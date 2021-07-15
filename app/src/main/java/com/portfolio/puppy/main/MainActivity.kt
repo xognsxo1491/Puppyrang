@@ -2,30 +2,42 @@ package com.portfolio.puppy.main
 
 import android.content.DialogInterface
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.portfolio.puppy.*
 import com.portfolio.puppy.dashboard.DashBoardFragment
 import com.portfolio.puppy.databinding.DrawerMainBinding
 import com.portfolio.puppy.etc.PreferencesAPI
 import com.portfolio.puppy.home.HomeFragment
 import com.portfolio.puppy.user.EditProfileActivity
+import com.portfolio.puppy.user.EmailAuthActivity
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
+    private val userImageUri = "https://puppyrang0222.cafe24.com/puppyrang/images/"
+
     private lateinit var mViewModel: MainViewModel
     private lateinit var mBinding: DrawerMainBinding
+
+    private lateinit var mEmail: String
+    private lateinit var mNavProfile: ImageView
+    private var mAuth: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,22 +51,28 @@ class MainActivity : AppCompatActivity() {
         val toolbar = mBinding.includeMain.toolbarMain
         setSupportActionBar(toolbar)
 
-        val email = PreferencesAPI(this).getEmail()
+        mEmail = PreferencesAPI(this).getEmail()
         val name = PreferencesAPI(this).getName()
+        mAuth = PreferencesAPI(this).getAuth()
 
         val navView = mBinding.navView.getHeaderView(0)
         val navEmail = navView.findViewById<TextView>(R.id.textView_drawer_email)
         val navName = navView.findViewById<TextView>(R.id.textView_drawer_name)
-        val navProfile = navView.findViewById<ImageView>(R.id.image_drawer_profile)
+        mNavProfile = navView.findViewById(R.id.image_drawer_profile)
+        val progressBar = navView.findViewById<ProgressBar>(R.id.progressBar_drawer)
 
-        navEmail.text = email
+        navEmail.text = mEmail
         navName.text = name
 
         setBottomNavClickListener()
 
         when (intent.getStringExtra("value")) {
             "editProfile" -> {
-                Toast.makeText(this, getString(R.string.success_editProfile), Toast.LENGTH_LONG).show()
+                Snackbar.make(mBinding.drawerLayout, getString(R.string.success_editProfile), Snackbar.LENGTH_LONG).show()
+            }
+
+            "AuthEmail" -> {
+                Snackbar.make(mBinding.drawerLayout, getString(R.string.auth_success), Snackbar.LENGTH_LONG).show()
             }
         }
 
@@ -78,13 +96,20 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        mViewModel.mUri.observe(this, {
-            if (!it.equals("")) {
-                navProfile.setImageURI(Uri.parse(it))
+        mViewModel.mLoadUserImage = MutableLiveData()
+        mViewModel.mLoadUserImage.observe(this, {
+            if (!it.equals("null")) {
+                Glide.with(this)
+                        .load("$userImageUri$it.jpg")
+                        .into(mNavProfile)
+                progressBar.visibility = View.INVISIBLE
+
+            } else {
+                progressBar.visibility = View.INVISIBLE
             }
         })
 
-        mBinding.navView.setNavigationItemSelectedListener { it ->
+        mBinding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.navigation_logout -> {
                     showDialogLogout()
@@ -106,6 +131,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        // 이메일 인증
+        if (!mAuth) {
+            Snackbar.make(mBinding.drawerLayout, getString(R.string.email_authentication), Snackbar.LENGTH_INDEFINITE)
+                    .setActionTextColor(ContextCompat.getColor(this, R.color.color_blue))
+                    .setAction(getString(R.string.done)) {
+                        val intent = Intent(this, EmailAuthActivity::class.java)
+                        startActivity(intent)
+                    }.show()
+        }
+    }
+
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu_main_toolbar, menu)
@@ -116,6 +156,8 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
 
             R.id.navigation_pets -> {
+                mNavProfile.setImageDrawable(null)
+                mViewModel.loadUserImage(mEmail)
                 mBinding.drawerLayout.openDrawer(GravityCompat.END)
                 return true
             }
@@ -156,19 +198,21 @@ class MainActivity : AppCompatActivity() {
 
     // 로그아웃 다이얼로그
     private fun showDialogLogout() {
-        val builder = AlertDialog.Builder(this)
+        val builder = MaterialAlertDialogBuilder(this, R.style.AlertDialogStyle)
                 .setTitle(getString(R.string.message))
                 .setMessage(getString(R.string.message_logout))
-                .setPositiveButton(getString(R.string.ok)) { dialog: DialogInterface, i: Int ->
+                .setPositiveButton(getString(R.string.ok)) { _: DialogInterface, _: Int ->
                     PreferencesAPI(this).logout()
 
                     finishAffinity()
                     exitProcess(0)
-                }.setNegativeButton(getString(R.string.cancel)) { dialog: DialogInterface, i: Int ->
+                }.setNegativeButton(getString(R.string.cancel)) { _: DialogInterface, _: Int ->
 
                 }
         val dlg = builder.create()
         dlg.show()
+        dlg.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.color_gray))
+        dlg.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.color_blue))
     }
 
     override fun onBackPressed() {

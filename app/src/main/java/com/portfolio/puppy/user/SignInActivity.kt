@@ -12,8 +12,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.portfolio.puppy.R
 import com.portfolio.puppy.databinding.ActivitySignInBinding
+import com.portfolio.puppy.etc.EmailAPI
 import com.portfolio.puppy.etc.PreferencesAPI
 import com.portfolio.puppy.main.MainActivity
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class SignInActivity : AppCompatActivity() {
     private lateinit var mViewModel: UserViewModel
@@ -33,11 +36,6 @@ class SignInActivity : AppCompatActivity() {
 
         val email = mBinding.inputLayoutSignInEmail.editText!!
         val pw = mBinding.inputLayoutSignInPw.editText!!
-
-        mBinding.buttonTest.setOnClickListener {
-            val intent = Intent(this, EditProfileActivity::class.java)
-            startActivity(intent)
-        }
 
         // 로그인
         mBinding.buttonSignIn.setOnClickListener {
@@ -68,7 +66,7 @@ class SignInActivity : AppCompatActivity() {
         mViewModel.mIsSuccess = MutableLiveData()
         mViewModel.mIsSuccess.observe(this, {
             if (it) {
-                PreferencesAPI(this).putEmailAndPw(email.text.toString(), pw.text.toString())
+                PreferencesAPI(this).putUserData(email.text.toString(), pw.text.toString(), mViewModel.mAuth)
 
                 val intent = Intent(this, MainActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
