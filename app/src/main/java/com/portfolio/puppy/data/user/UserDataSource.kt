@@ -49,7 +49,7 @@ class UserDataSource {
     }
 
     // 로그인
-    fun signIn(email: String, pw: String) = Single.create<String> {
+    fun signIn(email: String, pw: String) = Single.create<JSONObject> {
         val retrofit = retrofitBuilder()
         val api = retrofit.create(RetrofitUtil::class.java)
 
@@ -58,11 +58,9 @@ class UserDataSource {
                 if (response.isSuccessful && response.body() != null) {
                     try {
                         val jsonObject = JSONObject(response.body().toString())
-                        if (jsonObject.optString("result").equals("true")) {
-                            it.onSuccess(jsonObject.optString("userAuth"))
-                        } else {
-                            it.onSuccess("SignIn Failed")
-                        }
+                        Log.e("테스트", response.body().toString())
+
+                        it.onSuccess(jsonObject)
 
                     } catch (e: Exception) {
                         Log.e("UserViewModel", "SignIn 에러")

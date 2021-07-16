@@ -12,9 +12,9 @@ import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import com.portfolio.puppy.R
 import com.portfolio.puppy.databinding.ActivitySignUpBinding
-import com.portfolio.puppy.util.PreferencesUtil
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
@@ -62,8 +62,6 @@ class SignUpActivity : AppCompatActivity(),KodeinAware {
         mViewModel.mIsSuccess = MutableLiveData()
         mViewModel.mIsSuccess.observe(this, {
             if (it) {
-                PreferencesUtil(this).putUserData(email.text.toString(), pw.text.toString(), false)
-
                 val intent = Intent(this, EditProfileActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 startActivity(intent)
@@ -139,6 +137,11 @@ class SignUpActivity : AppCompatActivity(),KodeinAware {
 
             isClickable()
         }
+
+        mViewModel.mErrorMessage = MutableLiveData()
+        mViewModel.mErrorMessage.observe(this, {
+            Snackbar.make(mBinding.layoutSignUp, it, Snackbar.LENGTH_LONG).show()
+        })
     }
 
     // 회원가입 버튼 활성화

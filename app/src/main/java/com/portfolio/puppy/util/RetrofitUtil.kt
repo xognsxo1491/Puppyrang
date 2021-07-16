@@ -82,4 +82,21 @@ interface RetrofitUtil {
             @Field("USEREMAIL") userEmail: String
     ): Call<String>
 
+    // 게시글 작성
+    @FormUrlEncoded
+    @POST("writeBoard.php")
+    fun writeBoard(
+            @Field("USEREMAIL") userEmail: String,
+            @Field("USERNAME") userName: String,
+            @Field("TYPE") type: String,
+            @Field("UUID") uuid: String,
+            @Field("TITLE") title: String,
+            @Field("CONTENT") content: String,
+            @Field("IMAGE1") image1: String,
+            @Field("IMAGE2") image2: String,
+            @Field("IMAGE3") image3: String,
+            @Field("IMAGE4") image4: String,
+            @Field("IMAGE5") image5: String,
+            @Field("TIME") time: String,
+    ): Call<String>
 }

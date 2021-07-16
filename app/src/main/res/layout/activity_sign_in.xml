@@ -120,7 +120,9 @@
                     android:layout_marginEnd="16dp"
                     android:hint="@string/pw"
                     android:textColorHint="@color/color_gray"
-                    app:boxBackgroundColor="@color/color_gray_225">
+                    app:boxBackgroundColor="@color/color_gray_225"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="@color/color_dark">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"

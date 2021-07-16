@@ -13,6 +13,8 @@
     <string name="more">더보기</string>
     <string name="dashboard_free">자유 게시판</string>
 
+    <string name="error_auth">인증 번호가 올바르지 않습니다.</string>
+    <string name="success_write">게시글이 작성되었습니다.</string>
     <string name="content">내용</string>
     <string name="title">제목</string>
     <string name="write_board">게시글 작성</string>

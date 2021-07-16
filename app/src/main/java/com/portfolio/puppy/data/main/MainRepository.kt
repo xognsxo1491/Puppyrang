@@ -17,5 +17,9 @@ class MainRepository(private val dataSource: MainDataSource, private val context
         return PreferencesUtil(context).getAuth()
     }
 
+    fun logout() {
+        PreferencesUtil(context).logout()
+    }
+
     fun loadUserImage(email: String) = dataSource.loadUserImage(email)
 }

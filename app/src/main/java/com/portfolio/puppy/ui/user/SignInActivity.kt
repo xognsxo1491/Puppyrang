@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.portfolio.puppy.R
 import com.portfolio.puppy.databinding.ActivitySignInBinding
-import com.portfolio.puppy.util.PreferencesUtil
 import com.portfolio.puppy.ui.main.MainActivity
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
@@ -69,8 +68,6 @@ class SignInActivity : AppCompatActivity(), KodeinAware {
         mViewModel.mIsSuccess = MutableLiveData()
         mViewModel.mIsSuccess.observe(this, {
             if (it) {
-                PreferencesUtil(this).putUserData(email.text.toString(), pw.text.toString(), mViewModel.mAuth)
-
                 val intent = Intent(this, MainActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 startActivity(intent)
@@ -106,5 +103,10 @@ class SignInActivity : AppCompatActivity(), KodeinAware {
                 mBinding.inputLayoutSignInPw.error = null
             }
         }
+
+        mViewModel.mErrorMessage = MutableLiveData()
+        mViewModel.mErrorMessage.observe(this, {
+            Snackbar.make(mBinding.layoutSignIn, it, Snackbar.LENGTH_LONG).show()
+        })
     }
 }

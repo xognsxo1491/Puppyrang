@@ -11,6 +11,7 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/layout_signUp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white_245"
@@ -82,7 +83,9 @@
                 android:layout_marginTop="4dp"
                 android:textColorHint="@color/color_gray"
                 app:boxBackgroundColor="@color/white"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/color_dark">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -101,7 +104,9 @@
                 android:layout_marginTop="4dp"
                 android:textColorHint="@color/color_gray"
                 app:boxBackgroundColor="@color/white"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/color_dark">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"

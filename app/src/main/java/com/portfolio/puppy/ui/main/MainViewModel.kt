@@ -26,6 +26,10 @@ class MainViewModel(private val repository: MainRepository): ViewModel() {
         _fragmentStatus.value = 1
     }
 
+    fun logout() {
+        repository.logout()
+    }
+
     // Fragment 로딩 화면 설정
     fun updateFragmentStatus(num: Int) {
         _fragmentStatus.value = num

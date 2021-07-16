@@ -18,7 +18,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.portfolio.puppy.R
 import com.portfolio.puppy.databinding.ActivityEditProfileBinding
 import com.portfolio.puppy.util.ImageUtil
-import com.portfolio.puppy.util.PreferencesUtil
 import com.portfolio.puppy.ui.main.MainActivity
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
@@ -76,7 +75,7 @@ class EditProfileActivity : AppCompatActivity(), KodeinAware {
                 mBinding.imageEditProfile.setImageURI(intent.data)
 
                 val imageName = UUID.randomUUID().toString()
-                PreferencesUtil(this).putProfileImage(imageName)
+                mViewModel.putProfileImage(imageName)
 
                 val bitmap = ImageUtil()
                     .resize(this, intent.data!!, 200)
@@ -122,7 +121,7 @@ class EditProfileActivity : AppCompatActivity(), KodeinAware {
                         
                         1 -> { // 이미지 삭제
                             mBinding.imageEditProfile.setImageDrawable(null)
-                            mViewModel.deleteUserImage(email,  mViewModel.image)
+                            mViewModel.deleteUserImage(email, mViewModel.image)
                         }
                     }
                 }.create().show()
@@ -138,8 +137,6 @@ class EditProfileActivity : AppCompatActivity(), KodeinAware {
         mViewModel.mIsSuccess = MutableLiveData()
         mViewModel.mIsSuccess.observe(this, {
             if (it) {
-                PreferencesUtil(this).putName(nameEdit.toString())
-
                 val intent = Intent(this, MainActivity::class.java)
 
                 if (mValue == "main") {
@@ -179,6 +176,11 @@ class EditProfileActivity : AppCompatActivity(), KodeinAware {
                 mBinding.textViewEditProfileSubmit.setTextColor(ContextCompat.getColor(this, R.color.color_gray))
             }
         }
+
+        mViewModel.mErrorMessage = MutableLiveData()
+        mViewModel.mErrorMessage.observe(this, {
+            Snackbar.make(mBinding.layoutEditProfile, it, Snackbar.LENGTH_LONG).show()
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

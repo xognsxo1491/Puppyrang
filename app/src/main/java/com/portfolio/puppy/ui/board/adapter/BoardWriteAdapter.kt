@@ -1,9 +1,9 @@
-package com.portfolio.puppy.ui.board
+package com.portfolio.puppy.ui.board.adapter
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.portfolio.puppy.R
 import kotlin.collections.ArrayList
 
-class BoardAdapter internal constructor(list: ArrayList<Uri>) : RecyclerView.Adapter<BoardAdapter.ViewHolder>() {
+class BoardWriteAdapter internal constructor(list: ArrayList<Uri>) : RecyclerView.Adapter<BoardWriteAdapter.ViewHolder>() {
     private var mData: ArrayList<Uri> = list
     private lateinit var mContext: Context
 
@@ -29,19 +29,13 @@ class BoardAdapter internal constructor(list: ArrayList<Uri>) : RecyclerView.Ada
         val item = mData[position]
         holder.image.setImageURI(item)
 
-        val items = arrayOf<CharSequence>("이미지 변경", "이미지 삭제")
+        val items = arrayOf<CharSequence>("이미지 삭제")
 
         holder.image.setOnClickListener {
             val builder = AlertDialog.Builder(mContext)
             builder.setItems(items) { _, which ->
                 when (which) {
-                    0 -> { // 이미지 변경
-                        val intent = Intent(Intent.ACTION_PICK)
-                        intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-                    }
-
-                    1 -> { // 이미지 삭제
-                        holder.image.setImageDrawable(null)
+                    0 -> { // 이미지 삭제
                         mData.removeAt(position)
                     }
                 }

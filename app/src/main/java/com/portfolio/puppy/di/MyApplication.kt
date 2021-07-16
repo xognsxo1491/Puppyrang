@@ -1,12 +1,16 @@
 package com.portfolio.puppy.di
 
 import android.app.Application
+import com.portfolio.puppy.data.board.BoardDataSource
+import com.portfolio.puppy.data.board.BoardRepository
 import com.portfolio.puppy.data.home.HomeDataSource
 import com.portfolio.puppy.data.home.HomeRepository
 import com.portfolio.puppy.data.main.MainDataSource
 import com.portfolio.puppy.data.main.MainRepository
 import com.portfolio.puppy.data.user.UserDataSource
 import com.portfolio.puppy.data.user.UserRepository
+import com.portfolio.puppy.ui.board.BoardViewModel
+import com.portfolio.puppy.ui.board.BoardViewModelFactory
 import com.portfolio.puppy.ui.home.HomeViewModel
 import com.portfolio.puppy.ui.home.HomeViewModelFactory
 import com.portfolio.puppy.ui.main.MainViewModel
@@ -40,5 +44,10 @@ class MyApplication: Application(), KodeinAware {
         bind() from singleton { UserRepository(instance(), instance()) }
         bind() from provider { UserViewModel(instance()) }
         bind() from provider { UserViewModelFactory(instance()) }
+
+        bind() from singleton { BoardDataSource() }
+        bind() from singleton { BoardRepository(instance(), instance()) }
+        bind() from provider { BoardViewModel(instance()) }
+        bind() from provider { BoardViewModelFactory(instance()) }
     }
 }

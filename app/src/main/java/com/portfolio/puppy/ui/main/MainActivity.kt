@@ -61,6 +61,12 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         val name = mViewModel.name
         mAuth = mViewModel.auth
 
+        if (name == "null") {
+            val intent = Intent(this, EditProfileActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
+        }
+
         val navView = mBinding.navView.getHeaderView(0)
         val navEmail = navView.findViewById<TextView>(R.id.textView_drawer_email)
         val navName = navView.findViewById<TextView>(R.id.textView_drawer_name)
@@ -135,6 +141,11 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                 }
             }
         }
+
+        mViewModel.mErrorMessage = MutableLiveData()
+        mViewModel.mErrorMessage.observe(this, {
+            Snackbar.make(mBinding.drawerLayout, it, Snackbar.LENGTH_LONG).show()
+        })
     }
 
     override fun onResume() {
@@ -208,7 +219,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
                 .setTitle(getString(R.string.message))
                 .setMessage(getString(R.string.message_logout))
                 .setPositiveButton(getString(R.string.ok)) { _: DialogInterface, _: Int ->
-                    PreferencesUtil(this).logout()
+                    mViewModel.logout()
 
                     finishAffinity()
                     exitProcess(0)

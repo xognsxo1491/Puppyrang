@@ -2,6 +2,7 @@ package com.portfolio.puppy.util
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 
 class PreferencesUtil(val context: Context) {
 
@@ -78,9 +79,8 @@ class PreferencesUtil(val context: Context) {
     @SuppressLint("ApplySharedPref")
     fun logout() {
         val pref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
-        val editor = pref.edit()
+        val edit = pref.edit().clear()
 
-        editor.clear()
-        editor.commit()
+        edit.commit()
     }
 }

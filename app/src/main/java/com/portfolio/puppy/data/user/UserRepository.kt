@@ -18,12 +18,24 @@ class UserRepository(private val dataSource: UserDataSource, private val context
         return PreferencesUtil(context).getName()
     }
 
-    fun getAuth(): Boolean {
-        return PreferencesUtil(context).getAuth()
-    }
-
     fun getImage(): String {
         return PreferencesUtil(context).getProfileImage()
+    }
+
+    fun putUserData(email: String, pw: String) {
+        PreferencesUtil(context).putUserData(email, pw, false)
+    }
+
+    fun putName(name: String) {
+        PreferencesUtil(context).putName(name)
+    }
+
+    fun putAuth(value: Boolean) {
+        PreferencesUtil(context).putAuth(value)
+    }
+
+    fun putProfileImage(imageName: String) {
+        PreferencesUtil(context).putProfileImage(imageName)
     }
 
     fun signUp(email: String, pw: String) = dataSource.signUp(email, pw)

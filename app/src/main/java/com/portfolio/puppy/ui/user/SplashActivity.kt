@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import com.portfolio.puppy.R
 import com.portfolio.puppy.databinding.ActivitySplashBinding
 import com.portfolio.puppy.ui.main.MainActivity
@@ -47,6 +48,11 @@ class SplashActivity : AppCompatActivity(), KodeinAware {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 startActivity(intent)
             }
+        })
+
+        mViewModel.mErrorMessage = MutableLiveData()
+        mViewModel.mErrorMessage.observe(this, {
+            Snackbar.make(mBinding.layoutSplash, it, Snackbar.LENGTH_LONG).show()
         })
     }
 }

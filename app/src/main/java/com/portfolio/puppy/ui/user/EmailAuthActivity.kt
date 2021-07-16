@@ -10,9 +10,9 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import com.portfolio.puppy.R
 import com.portfolio.puppy.databinding.ActivityEmailAuthBinding
-import com.portfolio.puppy.util.PreferencesUtil
 import com.portfolio.puppy.ui.main.MainActivity
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
@@ -40,6 +40,7 @@ class EmailAuthActivity : AppCompatActivity(), KodeinAware {
 
         val email = mViewModel.email
 
+        setSupportActionBar(mBinding.toolbarEmailAuth)
         mBinding.toolbarEmailAuth.setNavigationIcon(R.drawable.ic_close_24)
         mBinding.buttonSubmit.isClickable = false
 
@@ -78,6 +79,10 @@ class EmailAuthActivity : AppCompatActivity(), KodeinAware {
 
             if (mCode == mBinding.textInputLayoutEmailAuth.editText!!.text.toString()) {
                 mViewModel.changeAuth(email)
+
+            } else {
+                mBinding.progressEmailAuth.visibility = View.INVISIBLE
+                Snackbar.make(mBinding.layoutEmailAuth, R.string.error_auth, Snackbar.LENGTH_LONG).show()
             }
         }
 
@@ -85,7 +90,7 @@ class EmailAuthActivity : AppCompatActivity(), KodeinAware {
         mViewModel.mIsSuccess = MutableLiveData()
         mViewModel.mIsSuccess.observe(this, {
             if (it) {
-                PreferencesUtil(this).putAuth(true)
+                mViewModel.putAuth(true)
 
                 val intent = Intent(this, MainActivity::class.java)
                 intent.putExtra("value", "AuthEmail")
@@ -94,6 +99,11 @@ class EmailAuthActivity : AppCompatActivity(), KodeinAware {
             } else {
                 mBinding.progressEmailAuth.visibility = View.INVISIBLE
             }
+        })
+
+        mViewModel.mErrorMessage = MutableLiveData()
+        mViewModel.mErrorMessage.observe(this, {
+            Snackbar.make(mBinding.layoutEmailAuth, it, Snackbar.LENGTH_LONG).show()
         })
     }
 
