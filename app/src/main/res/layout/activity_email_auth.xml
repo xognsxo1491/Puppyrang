@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.portfolio.puppy.user.UserViewModel" />
+            type="com.portfolio.puppy.ui.user.UserViewModel" />
     </data>
 
     <LinearLayout
@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:background="@color/white_245"
         android:orientation="vertical"
-        tools:context=".user.EmailAuthActivity">
+        tools:context=".ui.user.EmailAuthActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"

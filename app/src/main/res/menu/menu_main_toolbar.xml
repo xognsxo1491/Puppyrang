@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/navigation_pets"
+        android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_identity_24"
         android:title="@string/none"
         app:showAsAction="always" />

@@ -7,55 +7,43 @@
 
         <variable
             name="viewModel"
-            type="com.portfolio.puppy.ui.main.MainViewModel" />
+            type="com.portfolio.puppy.ui.board.BoardViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorOnPrimary">
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNav_main"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorOnPrimary"
-            app:itemIconTint="@color/color_bottom_nav"
-            app:itemTextColor="@color/color_bottom_nav"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/menu_main_bottom" />
+        android:background="?attr/colorOnPrimary"
+        android:orientation="vertical"
+        tools:context=".ui.board.BoardActivity">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/coordinatorLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:layout_constraintBottom_toTopOf="@+id/bottomNav_main"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appBarLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar_main"
+                    android:id="@+id/toolbar_board"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="?attr/colorOnPrimary"
                     app:layout_scrollFlags="scroll|enterAlways">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:id="@+id/text_board_title"
+                        style="@style/textView_title"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/app_name"
-                        android:textColor="?attr/colorPrimary"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:layout_gravity="center"
+                        android:text="@string/dashboard_free" />
 
                 </androidx.appcompat.widget.Toolbar>
 
@@ -76,5 +64,21 @@
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_board"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/color_pink"
+            android:clickable="true"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_create_24"
+            app:tint="@color/white"
+            tools:ignore="ContentDescription" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

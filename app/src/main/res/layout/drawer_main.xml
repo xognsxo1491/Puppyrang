@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.portfolio.puppy.main.MainViewModel" />
+            type="com.portfolio.puppy.ui.main.MainViewModel" />
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout

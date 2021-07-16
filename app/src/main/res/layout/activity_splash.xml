@@ -7,14 +7,14 @@
 
         <variable
             name="viewModel"
-            type="com.portfolio.puppy.user.UserViewModel" />
+            type="com.portfolio.puppy.ui.user.UserViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/colorPrimaryVariant"
-        tools:context=".user.SplashActivity">
+        tools:context=".ui.user.SplashActivity">
 
         <ProgressBar
             android:id="@+id/progressBar"

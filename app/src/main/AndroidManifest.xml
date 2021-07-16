@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".di.MyApplication"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,17 +16,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Puppy"
         android:usesCleartextTraffic="true">
-        <activity android:name=".user.EmailAuthActivity" />
-        <activity android:name=".user.EditProfileActivity" />
-        <activity android:name=".user.SignUpActivity" />
-        <activity android:name=".main.MainActivity" />
-        <activity android:name=".user.SignInActivity" />
+        <activity android:name="com.portfolio.puppy.ui.board.BoardWriteActivity"></activity>
+        <activity android:name="com.portfolio.puppy.ui.board.BoardActivity" />
+        <activity android:name="com.portfolio.puppy.ui.user.EmailAuthActivity" />
+        <activity android:name="com.portfolio.puppy.ui.user.EditProfileActivity" />
+        <activity android:name="com.portfolio.puppy.ui.user.SignUpActivity" />
+        <activity android:name="com.portfolio.puppy.ui.main.MainActivity" />
+        <activity android:name="com.portfolio.puppy.ui.user.SignInActivity" />
 
+        <!-- 변경 필요 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-6367380051833430~4827827565" />
 
-        <activity android:name=".user.SplashActivity">
+        <activity android:name="com.portfolio.puppy.ui.user.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
