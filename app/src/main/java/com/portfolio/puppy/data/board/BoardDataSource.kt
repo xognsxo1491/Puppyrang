@@ -24,12 +24,19 @@ class BoardDataSource {
                    image3: String,
                    image4: String,
                    image5: String,
+                   imageName1: String,
+                   imageName2: String,
+                   imageName3: String,
+                   imageName4: String,
+                   imageName5: String,
+                   imageCount: Int,
                    time: String
                    ) = Completable.create {
         val retrofit = retrofitBuilder()
         val api = retrofit.create(RetrofitUtil::class.java)
 
-        api.writeBoard(email, name, type, uuid, title, content, image1, image2, image3, image4, image5, time).enqueue(object : Callback<String> {
+        api.writeBoard(email, name, type, uuid, title, content, image1, image2, image3, image4, image5, imageName1, imageName2, imageName3, imageName4, imageName5, imageCount.toString(), time)
+                .enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful && response.body() != null) {
                     try {

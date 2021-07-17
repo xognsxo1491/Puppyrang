@@ -16,6 +16,21 @@ class BoardRepository(private val dataSource: BoardDataSource, private val conte
         return PreferencesUtil(context).getName()
     }
 
-    fun writeBoard(type: String, title: String, content: String, image1: String, image2: String, image3: String, image4: String, image5: String) =
-            dataSource.writeBoard(getEmail(), getName(), type, uuid, title, content, image1, image2, image3, image4, image5, time)
+    fun writeBoard(type: String,
+                   title: String,
+                   content: String,
+                   image1: String,
+                   image2: String,
+                   image3: String,
+                   image4: String,
+                   image5: String,
+                   imageName1: String,
+                   imageName2: String,
+                   imageName3: String,
+                   imageName4: String,
+                   imageName5: String,
+                   imageCount: Int
+                   ) =
+            dataSource.writeBoard(getEmail(), getName(), type, uuid, title, content, image1, image2, image3, image4, image5,
+                    imageName1, imageName2, imageName3, imageName4, imageName5, imageCount, time)
 }

@@ -97,6 +97,12 @@ interface RetrofitUtil {
             @Field("IMAGE3") image3: String,
             @Field("IMAGE4") image4: String,
             @Field("IMAGE5") image5: String,
+            @Field("IMAGENAME1") imageName1: String,
+            @Field("IMAGENAME2") imageName2: String,
+            @Field("IMAGENAME3") imageName3: String,
+            @Field("IMAGENAME4") imageName4: String,
+            @Field("IMAGENAME5") imageName5: String,
+            @Field("IMAGECOUNT") imageCount: String,
             @Field("TIME") time: String,
     ): Call<String>
 }

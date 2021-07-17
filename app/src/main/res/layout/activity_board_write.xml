@@ -11,6 +11,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_boardWrite"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/colorOnPrimary"
@@ -117,20 +118,25 @@
                         android:textColor="@color/color_dark" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <LinearLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_writeBoard"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:nestedScrollingEnabled="false"
+                    android:visibility="gone" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_writeBoard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:nestedScrollingEnabled="false"
-                        android:visibility="gone" />
-
-                </LinearLayout>
+                <TextView
+                    android:layout_marginTop="8dp"
+                    android:id="@+id/text_boardWrite_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="32dp"
+                    android:text="@string/count_write"
+                    android:textColor="@color/color_gray"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -147,7 +153,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/ic_add_a_photo_24"
-            app:tint="?attr/colorOnPrimary" />
+            app:tint="?attr/colorOnPrimary"
+            tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

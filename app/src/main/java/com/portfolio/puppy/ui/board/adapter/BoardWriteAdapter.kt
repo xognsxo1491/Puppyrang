@@ -3,11 +3,11 @@ package com.portfolio.puppy.ui.board.adapter
 import android.app.AlertDialog
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.portfolio.puppy.R
 import kotlin.collections.ArrayList
@@ -15,6 +15,7 @@ import kotlin.collections.ArrayList
 class BoardWriteAdapter internal constructor(list: ArrayList<Uri>) : RecyclerView.Adapter<BoardWriteAdapter.ViewHolder>() {
     private var mData: ArrayList<Uri> = list
     private lateinit var mContext: Context
+    var imageCount: MutableLiveData<Int> = MutableLiveData()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.context
@@ -37,6 +38,7 @@ class BoardWriteAdapter internal constructor(list: ArrayList<Uri>) : RecyclerVie
                 when (which) {
                     0 -> { // 이미지 삭제
                         mData.removeAt(position)
+                        imageCount.value = mData.size
                     }
                 }
             }.create().show()

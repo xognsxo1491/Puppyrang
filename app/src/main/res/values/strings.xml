@@ -13,6 +13,8 @@
     <string name="more">더보기</string>
     <string name="dashboard_free">자유 게시판</string>
 
+    <string name="error_count">사진은 최대 10장까지만 선택 가능합니다.</string>
+    <string name="count_write">0/10</string>
     <string name="error_auth">인증 번호가 올바르지 않습니다.</string>
     <string name="success_write">게시글이 작성되었습니다.</string>
     <string name="content">내용</string>

@@ -1,11 +1,11 @@
 package com.portfolio.puppy.ui.board
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,12 +16,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.portfolio.puppy.R
 import com.portfolio.puppy.databinding.ActivityBoardWriteBinding
 import com.portfolio.puppy.ui.board.adapter.BoardWriteAdapter
+import com.portfolio.puppy.util.ImageUtil
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
+import java.util.*
 import kotlin.collections.ArrayList
 
 class BoardWriteActivity : AppCompatActivity(), KodeinAware {
@@ -32,8 +35,10 @@ class BoardWriteActivity : AppCompatActivity(), KodeinAware {
     private lateinit var mViewModel: BoardViewModel
     private val mList = ArrayList<Uri>()
 
-    var bContent = false
+    private var bContent = false // 내용 공백 확인
+    private var bCount = true // 사진 개수 확인
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -65,14 +70,23 @@ class BoardWriteActivity : AppCompatActivity(), KodeinAware {
                 val intent = result.data!!
                 if (intent.data != null) { // 한개
                     mList.add(intent.data!!)
-                    Log.e("테스트1", mList.size.toString())
                     adapter.notifyDataSetChanged()
 
                 } else { // 여러개
-                    for (i: Int in 0 until result.data!!.clipData!!.itemCount) {
+                    for (i: Int in 0 until intent.clipData!!.itemCount) {
                         mList.add(intent.clipData!!.getItemAt(i).uri)
                         adapter.notifyDataSetChanged()
                     }
+                }
+
+                mBinding.textBoardWriteCount.text = "${mList.size}/5"
+                if (mList.size > 5) {
+                    bCount = false
+                    mBinding.textBoardWriteCount.setTextColor(ContextCompat.getColor(this, R.color.color_pink_error))
+
+                } else {
+                    bCount = true
+                    mBinding.textBoardWriteCount.setTextColor(ContextCompat.getColor(this, R.color.color_gray))
                 }
             }
         }
@@ -83,22 +97,6 @@ class BoardWriteActivity : AppCompatActivity(), KodeinAware {
             intent.type = "image/*"
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             resultLauncher.launch(intent)
-        }
-
-        // 제출 버튼 클릭
-        mBinding.textViewBoardWriteSubmit.setOnClickListener {
-            if (mViewModel.mIsWrite.value!! && bContent) {
-                mBinding.progressBoardWrite.visibility = View.VISIBLE
-
-                if (mList.count() == 0) {
-                    mViewModel.writeBoard(type.toString(), title!!.text.toString(), content!!.text.toString(), "", "", "", "", "")
-
-                } else {
-                    when (mList.count()) {
-
-                    }
-                }
-            }
         }
 
         //  성공 여부
@@ -115,12 +113,76 @@ class BoardWriteActivity : AppCompatActivity(), KodeinAware {
             }
         })
 
-        mViewModel.mIsWrite = MutableLiveData()
+        mViewModel.mIsWrite = MutableLiveData(false)
         mViewModel.mIsWrite.observe(this, {
             if (it) {
                 mBinding.textViewBoardWriteSubmit.setTextColor(ContextCompat.getColor(this, R.color.color_blue))
             } else {
-                mBinding.textViewBoardWriteSubmit.setTextColor(ContextCompat.getColor(this, R.color.color_pink))
+                mBinding.textViewBoardWriteSubmit.setTextColor(ContextCompat.getColor(this, R.color.color_gray))
+            }
+        })
+
+        // 제출 버튼 클릭
+        mBinding.textViewBoardWriteSubmit.setOnClickListener {
+            if (mViewModel.mIsWrite.value!! && bContent && bCount) {
+                mBinding.progressBoardWrite.visibility = View.VISIBLE
+
+                if (mList.count() == 0) {
+                    mViewModel.writeBoard(type.toString(), title!!.text.toString(), content!!.text.toString(),
+                            "", "", "", "", "", "", "", "", "", "", 0)
+
+                } else {
+                    when (mList.size) {
+                        1 -> {
+                            mViewModel.writeBoard(type.toString(), title!!.text.toString(), content!!.text.toString(), ImageUtil().bitmapToString(ImageUtil()
+                                    .getCapturedImage(mList[0], this)), "", "", "", "",
+                                    UUID.randomUUID().toString(), "", "", "", "", 1)
+                        }
+
+                        2 -> {
+                            mViewModel.writeBoard(type.toString(), title!!.text.toString(), content!!.text.toString(), ImageUtil().bitmapToString(ImageUtil()
+                                    .getCapturedImage(mList[0], this)), ImageUtil().bitmapToString(ImageUtil()
+                                    .getCapturedImage(mList[1], this)), "", "", "",
+                                    UUID.randomUUID().toString(), UUID.randomUUID().toString(), "", "", "", 2)
+                        }
+
+                        3 -> {
+                            mViewModel.writeBoard(type.toString(), title!!.text.toString(), content!!.text.toString(), ImageUtil().bitmapToString(ImageUtil()
+                                    .getCapturedImage(mList[0], this)), ImageUtil().bitmapToString(ImageUtil()
+                                    .getCapturedImage(mList[1], this)), ImageUtil().bitmapToString(ImageUtil()
+                                    .getCapturedImage(mList[2], this)), "", "",
+                                    UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), "", "", 3)
+                        }
+
+                        4 -> {
+                            mViewModel.writeBoard(type.toString(), title!!.text.toString(), content!!.text.toString(), ImageUtil().bitmapToString(ImageUtil()
+                                    .getCapturedImage(mList[0], this)), ImageUtil().bitmapToString(ImageUtil()
+                                    .getCapturedImage(mList[1], this)), ImageUtil().bitmapToString(ImageUtil()
+                                    .getCapturedImage(mList[2], this)), ImageUtil().bitmapToString(ImageUtil()
+                                    .getCapturedImage(mList[3], this)), "",
+                                    UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), "", 4)
+                        }
+
+                        5 -> {
+                            mViewModel.writeBoard(type.toString(), title!!.text.toString(), content!!.text.toString(), ImageUtil().bitmapToString(ImageUtil()
+                                    .getCapturedImage(mList[0], this)), ImageUtil().bitmapToString(ImageUtil()
+                                    .getCapturedImage(mList[1], this)), ImageUtil().bitmapToString(ImageUtil()
+                                    .getCapturedImage(mList[2], this)), ImageUtil().bitmapToString(ImageUtil()
+                                    .getCapturedImage(mList[3], this)), ImageUtil().bitmapToString(ImageUtil()
+                                    .getCapturedImage(mList[4], this)),
+                                    UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), 5)
+                        }
+                    }
+                }
+            }
+        }
+
+        adapter.imageCount.observe(this, {
+            mBinding.textBoardWriteCount.text = "$it/5"
+
+            if (it <= 5) {
+                bCount = true
+                mBinding.textBoardWriteCount.setTextColor(ContextCompat.getColor(this, R.color.color_gray))
             }
         })
 
@@ -131,6 +193,11 @@ class BoardWriteActivity : AppCompatActivity(), KodeinAware {
         content!!.addTextChangedListener{
             bContent = it!!.length in 1..1000
         }
+
+        mViewModel.mError = MutableLiveData()
+        mViewModel.mError.observe(this, {
+            Snackbar.make(mBinding.layoutBoardWrite, it, Snackbar.LENGTH_LONG).show()
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

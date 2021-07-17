@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.portfolio.puppy.R
@@ -43,6 +44,11 @@ class BoardActivity : AppCompatActivity(), KodeinAware {
             intent.putExtra("value", "free")
             startActivity(intent)
         }
+
+        mViewModel.mError = MutableLiveData()
+        mViewModel.mError.observe(this, {
+            Snackbar.make(mBinding.layoutBoard, it, Snackbar.LENGTH_LONG).show()
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

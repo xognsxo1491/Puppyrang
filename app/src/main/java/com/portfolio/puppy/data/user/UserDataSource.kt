@@ -58,8 +58,6 @@ class UserDataSource {
                 if (response.isSuccessful && response.body() != null) {
                     try {
                         val jsonObject = JSONObject(response.body().toString())
-                        Log.e("테스트", response.body().toString())
-
                         it.onSuccess(jsonObject)
 
                     } catch (e: Exception) {

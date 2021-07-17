@@ -23,7 +23,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.portfolio.puppy.*
 import com.portfolio.puppy.ui.board.DashBoardFragment
 import com.portfolio.puppy.databinding.DrawerMainBinding
-import com.portfolio.puppy.util.PreferencesUtil
 import com.portfolio.puppy.ui.home.HomeFragment
 import com.portfolio.puppy.ui.user.EditProfileActivity
 import com.portfolio.puppy.ui.user.EmailAuthActivity
@@ -33,7 +32,7 @@ import org.kodein.di.generic.instance
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity(), KodeinAware {
-    private val userImageUri = "https://puppyrang0222.cafe24.com/puppyrang/images/"
+    private val userImageUri = "https://puppyrang0222.cafe24.com/puppyrang/images/profile/" // 변경 필요
 
     override val kodein by kodein()
     private val factory: MainViewModelFactory by instance()
