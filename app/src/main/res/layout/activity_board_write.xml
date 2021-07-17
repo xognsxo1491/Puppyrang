@@ -85,7 +85,7 @@
                     android:layout_margin="16dp"
                     android:hint="@string/title"
                     android:textColorHint="@color/color_gray"
-                    app:boxBackgroundColor="@color/white_245"
+                    app:boxBackgroundColor="?attr/colorSecondary"
                     app:counterEnabled="true"
                     app:counterMaxLength="100"
                     app:counterTextColor="@color/color_gray"
@@ -94,11 +94,13 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/color_dark" />
+                        android:textColor="?attr/colorPrimary"
+                        android:textCursorDrawable="@drawable/edit_text_cursor" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout_boardWrite_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -106,7 +108,7 @@
                     android:layout_marginBottom="16dp"
                     android:hint="@string/content"
                     android:textColorHint="@color/color_gray"
-                    app:boxBackgroundColor="@color/white_245"
+                    app:boxBackgroundColor="?attr/colorSecondary"
                     app:counterEnabled="true"
                     app:counterMaxLength="1000"
                     app:counterTextColor="@color/color_gray"
@@ -115,7 +117,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/color_dark" />
+                        android:textColor="?attr/colorPrimary"
+                        android:textCursorDrawable="@drawable/edit_text_cursor" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -128,11 +131,11 @@
                     android:visibility="gone" />
 
                 <TextView
-                    android:layout_marginTop="8dp"
                     android:id="@+id/text_boardWrite_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="32dp"
                     android:text="@string/count_write"
                     android:textColor="@color/color_gray"

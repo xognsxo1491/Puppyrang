@@ -14,7 +14,7 @@
         android:id="@+id/layout_signUp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white_245"
+        android:background="?attr/colorOnPrimary"
         android:orientation="vertical"
         tools:context=".ui.user.SignUpActivity">
 
@@ -36,7 +36,7 @@
                     android:id="@+id/toolbar_signUp"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@color/white" />
+                    android:background="?attr/colorOnPrimary" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
                 android:textColorHint="@color/color_gray"
-                app:boxBackgroundColor="@color/white"
+                app:boxBackgroundColor="?attr/colorSecondary"
                 app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     android:selectAllOnFocus="true"
-                    android:textColor="@color/black" />
+                    android:textColor="?attr/colorPrimary" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textColorHint="@color/color_gray"
-                app:boxBackgroundColor="@color/white"
+                app:boxBackgroundColor="?attr/colorSecondary"
                 app:errorEnabled="true"
                 app:passwordToggleEnabled="true"
                 app:passwordToggleTint="@color/color_dark">
@@ -93,7 +93,7 @@
                     android:hint="@string/pw"
                     android:inputType="textPassword"
                     android:selectAllOnFocus="true"
-                    android:textColor="@color/black" />
+                    android:textColor="?attr/colorPrimary" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textColorHint="@color/color_gray"
-                app:boxBackgroundColor="@color/white"
+                app:boxBackgroundColor="?attr/colorSecondary"
                 app:errorEnabled="true"
                 app:passwordToggleEnabled="true"
                 app:passwordToggleTint="@color/color_dark">
@@ -114,7 +114,8 @@
                     android:hint="@string/pw_certification"
                     android:inputType="textPassword"
                     android:selectAllOnFocus="true"
-                    android:textColor="@color/black" />
+                    android:textColor="?attr/colorPrimary" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button

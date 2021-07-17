@@ -49,6 +49,7 @@ class BoardWriteActivity : AppCompatActivity(), KodeinAware {
         mBinding.lifecycleOwner = this
 
         setSupportActionBar(mBinding.toolbarBoardWrite)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
         mBinding.toolbarBoardWrite.setNavigationIcon(R.drawable.ic_close_24)
 
         val type = intent.getStringExtra("value")

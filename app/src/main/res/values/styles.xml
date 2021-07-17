@@ -19,4 +19,10 @@
         <item name="android:textColorPrimary">@color/white</item>
     </style>
 
+    <style name="MyCustomTheme" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:textSelectHandle">@color/color_dark</item>
+        <item name="android:textSelectHandleLeft">@color/color_dark</item>
+        <item name="android:textSelectHandleRight">@color/color_dark</item>
+    </style>
+
 </resources>

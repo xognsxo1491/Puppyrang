@@ -49,13 +49,15 @@ class SignUpActivity : AppCompatActivity(),KodeinAware {
 
         // 회원가입 버튼 클릭 이벤트
         mBinding.buttonSignup.setOnClickListener {
-            mBinding.progressBarSignUp.visibility = View.VISIBLE
+            if (mIsEmail && mIsPw && mIsPwCertification) {
+                mBinding.progressBarSignUp.visibility = View.VISIBLE
 
-            // 키보드 내리기
-            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(pwCertification.windowToken, 0)
+                // 키보드 내리기
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(pwCertification.windowToken, 0)
 
-            mViewModel.validateEmail(email.text.toString())
+                mViewModel.validateEmail(email.text.toString())
+            }
         }
 
         // 회원가입 성공 여부

@@ -14,7 +14,7 @@
         android:id="@+id/layoutSignIn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorPrimaryVariant"
+        android:background="@color/color_dark"
         tools:context=".ui.user.SignInActivity">
 
         <ImageView
@@ -78,7 +78,7 @@
             android:layout_marginBottom="24dp"
             app:cardBackgroundColor="?attr/colorOnPrimary"
             app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
+            app:cardElevation="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -101,14 +101,14 @@
                     android:layout_margin="16dp"
                     android:hint="@string/email"
                     android:textColorHint="@color/color_gray"
-                    app:boxBackgroundColor="@color/color_gray_225">
+                    app:boxBackgroundColor="?attr/colorSecondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
                         android:selectAllOnFocus="true"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/color_dark" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -120,16 +120,16 @@
                     android:layout_marginEnd="16dp"
                     android:hint="@string/pw"
                     android:textColorHint="@color/color_gray"
-                    app:boxBackgroundColor="@color/color_gray_225"
+                    app:boxBackgroundColor="?attr/colorSecondary"
                     app:passwordToggleEnabled="true"
-                    app:passwordToggleTint="@color/color_dark">
+                    app:passwordToggleTint="?attr/colorPrimary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPassword"
                         android:selectAllOnFocus="true"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/color_dark" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -141,6 +141,7 @@
                     android:backgroundTint="?attr/colorPrimary"
                     android:focusable="false"
                     android:text="@string/signIn"
+                    android:textColor="?attr/colorOnPrimary"
                     android:textStyle="bold" />
 
                 <Button
@@ -149,17 +150,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
-                    android:backgroundTint="?attr/colorOnPrimary"
+                    android:backgroundTint="@color/color_blue"
                     android:focusable="false"
                     android:text="@string/signUp"
-                    android:textColor="?attr/colorOnSecondary"
+                    android:textColor="@color/white"
                     android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_margin="16dp"
-                    android:background="?attr/colorOnSecondary"
+                    android:background="?attr/colorPrimary"
                     android:orientation="vertical"
                     tools:ignore="UselessLeaf" />
 
@@ -170,9 +171,10 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
-                    android:backgroundTint="?attr/colorPrimary"
+                    android:backgroundTint="@color/color_dark"
                     android:focusable="false"
                     android:text="@string/none"
+                    android:textColor="@color/white"
                     android:textStyle="bold" />
 
             </LinearLayout>

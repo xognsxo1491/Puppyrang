@@ -32,6 +32,7 @@ class BoardActivity : AppCompatActivity(), KodeinAware {
         mBinding.lifecycleOwner = this
 
         setSupportActionBar(mBinding.toolbarBoard)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
         mBinding.toolbarBoard.setNavigationIcon(R.drawable.ic_arrow_back_24)
 
         when (intent.getStringExtra("value")) {

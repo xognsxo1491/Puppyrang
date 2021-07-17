@@ -14,7 +14,7 @@
         android:id="@+id/layout_editProfile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white_245"
+        android:background="?attr/colorOnPrimary"
         tools:context=".ui.user.EditProfileActivity">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -35,7 +35,7 @@
                     android:id="@+id/toolbar_editProfile"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@color/white" />
+                    android:background="?attr/colorOnPrimary" />
 
                 <TextView
                     android:id="@+id/text_edit_title"
@@ -124,7 +124,7 @@
             android:layout_marginEnd="32dp"
             android:hint="@string/name"
             android:textColorHint="@color/color_gray"
-            app:boxBackgroundColor="@color/white"
+            app:boxBackgroundColor="?attr/colorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView">
@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:selectAllOnFocus="true"
-                android:textColor="@color/black" />
+                android:textColor="?attr/colorPrimary" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
