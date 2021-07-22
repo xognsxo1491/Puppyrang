@@ -7,6 +7,7 @@
     <color name="color_gray_225">#E1E1E1</color>
 
     <color name="color_dark">#1B222E</color>
+    <color name="color_dark_bright">#323F55</color>
     <color name="color_dark_deep">#FC161C25</color>
     <color name="color_pink">#ED5A81</color>
     <color name="color_pink_error">#CF6678</color>

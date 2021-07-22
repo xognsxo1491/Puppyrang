@@ -4,39 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.portfolio.puppy.ui.board.BoardViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_board"
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        android:id="@+id/slide"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorOnPrimary"
-        android:orientation="vertical"
+        android:gravity="bottom"
+        app:umanoDragView="@id/layout_slide"
+        app:umanoOverlay="true"
+        app:umanoPanelHeight="15dp"
+        app:umanoShadowHeight="8dp"
         tools:context=".ui.board.BoardActivity">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_board"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:background="?attr/colorSecondary"
+            android:orientation="vertical">
 
             <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBarLayout3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar_board"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorOnPrimary"
-                    app:layout_scrollFlags="scroll|enterAlways">
+                    android:background="?attr/colorOnPrimary">
 
                     <TextView
                         android:id="@+id/text_board_title"
@@ -52,34 +55,114 @@
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/refresh_board"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appBarLayout3">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_board"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_board"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="@color/color_pink"
+                android:clickable="true"
+                app:borderWidth="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_create_24"
+                app:tint="@color/white"
+                tools:ignore="ContentDescription" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_board"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="24dp"
-            android:backgroundTint="@color/color_pink"
-            android:clickable="true"
-            app:borderWidth="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ic_create_24"
-            app:tint="@color/white"
-            tools:ignore="ContentDescription" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_comment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/layout_slide"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:orientation="vertical"
+                    tools:ignore="UselessLeaf" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?attr/colorSecondary">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_board_comment"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="16dp"
+                        android:hint="@string/insert_comment"
+                        android:textColorHint="@color/color_gray"
+                        app:boxBackgroundColor="?attr/colorOnPrimary"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="500"
+                        app:counterTextColor="@color/color_gray"
+                        app:layout_constraintEnd_toStartOf="@+id/image_board_send"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:selectAllOnFocus="true"
+                            android:textColor="?attr/colorPrimary" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/image_board_send"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="22dp"
+                        android:layout_marginEnd="14dp"
+                        android:visibility="invisible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_send_24"
+                        tools:ignore="ContentDescription" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_comment"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="8dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_board_comment" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 </layout>

@@ -2,7 +2,6 @@ package com.portfolio.puppy.util
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 
 class PreferencesUtil(val context: Context) {
 
@@ -36,7 +35,7 @@ class PreferencesUtil(val context: Context) {
         editor.apply()
     }
 
-    // 프로필 이미지 이름 저장
+    // 이메일 인증 여부
     fun putAuth(auth: Boolean) {
         val pref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
         val editor = pref.edit()
@@ -79,8 +78,17 @@ class PreferencesUtil(val context: Context) {
     @SuppressLint("ApplySharedPref")
     fun logout() {
         val pref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
-        val edit = pref.edit().clear()
+        val edit = pref.edit()
 
+        edit.clear()
         edit.commit()
+    }
+
+    fun deleteUserImage() {
+        val pref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
+        val edit = pref.edit()
+
+        edit.remove("userImage")
+        edit.apply()
     }
 }

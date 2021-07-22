@@ -75,10 +75,8 @@ class EditProfileActivity : AppCompatActivity(), KodeinAware {
                 mBinding.imageEditProfile.setImageURI(intent.data)
 
                 val imageName = UUID.randomUUID().toString()
-                mViewModel.putProfileImage(imageName)
 
-                val bitmap = ImageUtil()
-                    .resize(this, intent.data!!, 200)
+                val bitmap = ImageUtil().resize(this, intent.data!!, 100)
                 mViewModel.uploadUserImage(email, bitmap, imageName)
             }
         }
@@ -121,7 +119,8 @@ class EditProfileActivity : AppCompatActivity(), KodeinAware {
                         
                         1 -> { // 이미지 삭제
                             mBinding.imageEditProfile.setImageDrawable(null)
-                            mViewModel.deleteUserImage(email, mViewModel.image)
+                            mViewModel.deleteUserImage(email) // retrofit
+                            mViewModel.deleteUserImage() // sharedPreferences
                         }
                     }
                 }.create().show()

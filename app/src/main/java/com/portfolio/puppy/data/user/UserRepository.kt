@@ -38,6 +38,10 @@ class UserRepository(private val dataSource: UserDataSource, private val context
         PreferencesUtil(context).putProfileImage(imageName)
     }
 
+    fun deleteProfileImage() {
+        PreferencesUtil(context).deleteUserImage()
+    }
+
     fun signUp(email: String, pw: String) = dataSource.signUp(email, pw)
 
     fun signIn(email: String, pw: String) = dataSource.signIn(email, pw)
@@ -50,7 +54,7 @@ class UserRepository(private val dataSource: UserDataSource, private val context
 
     fun loadUserImage(email: String) = dataSource.loadUserImage(email)
 
-    fun deleteUserImage(email: String, image: String) = dataSource.deleteUserImage(email, image)
+    fun deleteUserImage(email: String) = dataSource.deleteUserImage(email, getImage())
 
     fun changeName(email: String, name: String) = dataSource.changeName(email, name)
 

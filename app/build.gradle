@@ -81,8 +81,23 @@ dependencies {
     implementation files('libs/additionnal.jar')
     implementation files('libs/mail.jar')
 
-    //Kodein
+    // Kodein
     implementation "org.kodein.di:kodein-di-generic-jvm:6.2.1"
     implementation "org.kodein.di:kodein-di-framework-android-x:6.2.1"
 
+    // Paging
+    def paging_version = "3.0.0"
+    implementation("androidx.paging:paging-runtime-ktx:$paging_version")
+
+    // alternatively - without Android dependencies for tests
+    testImplementation("androidx.paging:paging-common-ktx:$paging_version")
+
+    // optional - RxJava2 support
+    implementation("androidx.paging:paging-rxjava2-ktx:$paging_version")
+
+    // optional - Jetpack Compose integration
+    implementation("androidx.paging:paging-compose:1.0.0-alpha11")
+
+    // Slide Up
+    implementation 'com.sothree.slidinguppanel:library:3.4.0'
 }

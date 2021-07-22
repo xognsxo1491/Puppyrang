@@ -27,7 +27,7 @@ class DashBoardFragment : Fragment(), KodeinAware {
 
         mBinding.cardDashBoardFree.setOnClickListener {
             val intent = Intent(context, BoardActivity::class.java)
-            intent.putExtra("value", "free")
+            intent.putExtra("board", "free")
             startActivity(intent)
         }
 

@@ -21,7 +21,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
     val email = repository.getEmail() // 이메일
     val pw = repository.getPw() // 비밀번호
     var name = repository.getName() // 닉네임
-    val image = repository.getImage() // 프로필 사진
+
     var auth: Boolean = false // 이메일 인증 여부
 
     fun putAuth(bool: Boolean) {
@@ -30,6 +30,10 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
     fun putProfileImage(imageName: String) {
         repository.putProfileImage(imageName)
+    }
+
+    fun deleteUserImage() {
+        repository.deleteProfileImage()
     }
 
     fun signUp(email: String, pw: String) {
@@ -118,6 +122,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     mUploadUserImage.value = true
+                    putProfileImage(imageName)
                 }, {
                     mErrorMessage.value = "이미지 업로드에 실패하였습니다."
                 })
@@ -125,8 +130,8 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
         disposable.add(data)
     }
 
-    fun deleteUserImage(email: String, image: String) {
-        val data = repository.deleteUserImage(email, image)
+    fun deleteUserImage(email: String) {
+        val data = repository.deleteUserImage(email)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

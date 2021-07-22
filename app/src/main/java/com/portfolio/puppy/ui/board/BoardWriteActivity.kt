@@ -35,7 +35,6 @@ class BoardWriteActivity : AppCompatActivity(), KodeinAware {
     private lateinit var mViewModel: BoardViewModel
     private val mList = ArrayList<Uri>()
 
-    private var bContent = false // 내용 공백 확인
     private var bCount = true // 사진 개수 확인
 
     @SuppressLint("SetTextI18n")
@@ -52,8 +51,7 @@ class BoardWriteActivity : AppCompatActivity(), KodeinAware {
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         mBinding.toolbarBoardWrite.setNavigationIcon(R.drawable.ic_close_24)
 
-        val type = intent.getStringExtra("value")
-        val title = mBinding.textInputLayoutBoardWriteTitle.editText
+        val type = intent.getStringExtra("board")
         val content = mBinding.textInputLayoutBoardWriteContent.editText
 
         // 이미지 리사이클러뷰
@@ -106,6 +104,7 @@ class BoardWriteActivity : AppCompatActivity(), KodeinAware {
             if (it) {
                 val intent = Intent(this, BoardActivity::class.java)
                 intent.putExtra("value", "success")
+                intent.putExtra("board", type)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
 
@@ -125,53 +124,53 @@ class BoardWriteActivity : AppCompatActivity(), KodeinAware {
 
         // 제출 버튼 클릭
         mBinding.textViewBoardWriteSubmit.setOnClickListener {
-            if (mViewModel.mIsWrite.value!! && bContent && bCount) {
+            if (mViewModel.mIsWrite.value!! && bCount) {
                 mBinding.progressBoardWrite.visibility = View.VISIBLE
 
                 if (mList.count() == 0) {
-                    mViewModel.writeBoard(type.toString(), title!!.text.toString(), content!!.text.toString(),
-                            "", "", "", "", "", "", "", "", "", "", 0)
+                    mViewModel.writeBoard(type.toString(), content!!.text.toString(),
+                            "", "", "", "", "", "", "", "", "", "")
 
                 } else {
                     when (mList.size) {
                         1 -> {
-                            mViewModel.writeBoard(type.toString(), title!!.text.toString(), content!!.text.toString(), ImageUtil().bitmapToString(ImageUtil()
+                            mViewModel.writeBoard(type.toString(), content!!.text.toString(), ImageUtil().bitmapToString(ImageUtil()
                                     .getCapturedImage(mList[0], this)), "", "", "", "",
-                                    UUID.randomUUID().toString(), "", "", "", "", 1)
+                                    UUID.randomUUID().toString(), "", "", "", "")
                         }
 
                         2 -> {
-                            mViewModel.writeBoard(type.toString(), title!!.text.toString(), content!!.text.toString(), ImageUtil().bitmapToString(ImageUtil()
+                            mViewModel.writeBoard(type.toString(), content!!.text.toString(), ImageUtil().bitmapToString(ImageUtil()
                                     .getCapturedImage(mList[0], this)), ImageUtil().bitmapToString(ImageUtil()
                                     .getCapturedImage(mList[1], this)), "", "", "",
-                                    UUID.randomUUID().toString(), UUID.randomUUID().toString(), "", "", "", 2)
+                                    UUID.randomUUID().toString(), UUID.randomUUID().toString(), "", "", "")
                         }
 
                         3 -> {
-                            mViewModel.writeBoard(type.toString(), title!!.text.toString(), content!!.text.toString(), ImageUtil().bitmapToString(ImageUtil()
+                            mViewModel.writeBoard(type.toString(), content!!.text.toString(), ImageUtil().bitmapToString(ImageUtil()
                                     .getCapturedImage(mList[0], this)), ImageUtil().bitmapToString(ImageUtil()
                                     .getCapturedImage(mList[1], this)), ImageUtil().bitmapToString(ImageUtil()
                                     .getCapturedImage(mList[2], this)), "", "",
-                                    UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), "", "", 3)
+                                    UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), "", "")
                         }
 
                         4 -> {
-                            mViewModel.writeBoard(type.toString(), title!!.text.toString(), content!!.text.toString(), ImageUtil().bitmapToString(ImageUtil()
+                            mViewModel.writeBoard(type.toString(), content!!.text.toString(), ImageUtil().bitmapToString(ImageUtil()
                                     .getCapturedImage(mList[0], this)), ImageUtil().bitmapToString(ImageUtil()
                                     .getCapturedImage(mList[1], this)), ImageUtil().bitmapToString(ImageUtil()
                                     .getCapturedImage(mList[2], this)), ImageUtil().bitmapToString(ImageUtil()
                                     .getCapturedImage(mList[3], this)), "",
-                                    UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), "", 4)
+                                    UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), "")
                         }
 
                         5 -> {
-                            mViewModel.writeBoard(type.toString(), title!!.text.toString(), content!!.text.toString(), ImageUtil().bitmapToString(ImageUtil()
+                            mViewModel.writeBoard(type.toString(), content!!.text.toString(), ImageUtil().bitmapToString(ImageUtil()
                                     .getCapturedImage(mList[0], this)), ImageUtil().bitmapToString(ImageUtil()
                                     .getCapturedImage(mList[1], this)), ImageUtil().bitmapToString(ImageUtil()
                                     .getCapturedImage(mList[2], this)), ImageUtil().bitmapToString(ImageUtil()
                                     .getCapturedImage(mList[3], this)), ImageUtil().bitmapToString(ImageUtil()
                                     .getCapturedImage(mList[4], this)),
-                                    UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), 5)
+                                    UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString(), UUID.randomUUID().toString())
                         }
                     }
                 }
@@ -187,12 +186,8 @@ class BoardWriteActivity : AppCompatActivity(), KodeinAware {
             }
         })
 
-        title!!.addTextChangedListener {
-            mViewModel.mIsWrite.value = it!!.length in 1..100
-        }
-
-        content!!.addTextChangedListener{
-            bContent = it!!.length in 1..1000
+        content!!.addTextChangedListener {
+            mViewModel.mIsWrite.value = it!!.length in 1..1000
         }
 
         mViewModel.mError = MutableLiveData()

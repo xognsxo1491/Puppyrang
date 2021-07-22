@@ -5,7 +5,6 @@ import com.portfolio.puppy.util.PreferencesUtil
 import java.util.*
 
 class BoardRepository(private val dataSource: BoardDataSource, private val context: Context) {
-    private val uuid = UUID.randomUUID().toString()
     private val time = System.currentTimeMillis().toString()
 
     fun getEmail(): String {
@@ -16,8 +15,11 @@ class BoardRepository(private val dataSource: BoardDataSource, private val conte
         return PreferencesUtil(context).getName()
     }
 
+    fun getProfileImage(): String {
+        return PreferencesUtil(context).getProfileImage()
+    }
+
     fun writeBoard(type: String,
-                   title: String,
                    content: String,
                    image1: String,
                    image2: String,
@@ -28,9 +30,20 @@ class BoardRepository(private val dataSource: BoardDataSource, private val conte
                    imageName2: String,
                    imageName3: String,
                    imageName4: String,
-                   imageName5: String,
-                   imageCount: Int
+                   imageName5: String
                    ) =
-            dataSource.writeBoard(getEmail(), getName(), type, uuid, title, content, image1, image2, image3, image4, image5,
-                    imageName1, imageName2, imageName3, imageName4, imageName5, imageCount, time)
+            dataSource.writeBoard(getEmail(), getName(), getProfileImage(), type, UUID.randomUUID().toString(), content, image1, image2, image3, image4, image5,
+                    imageName1, imageName2, imageName3, imageName4, imageName5, time)
+
+    fun writeComment(type: String, uuidBoard: String, comment: String) =
+            dataSource.writeComment(type, uuidBoard, UUID.randomUUID().toString(), getEmail(), getName(), getProfileImage(), comment, time)
+
+    fun loadCommentData(uuid: String, type: String) =
+            dataSource.loadCommentData(uuid, type)
+
+    fun loadBoardCount(type: String) =
+            dataSource.loadBoardCount(type)
+
+    fun changeBoardCount(comment: Int, uuid: String) =
+            dataSource.changeBoardCount(comment, uuid)
 }

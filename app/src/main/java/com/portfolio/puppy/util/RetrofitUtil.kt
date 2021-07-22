@@ -67,7 +67,7 @@ interface RetrofitUtil {
             @Field("USEREMAIL") userEmail: String,
     ): Call<String>
 
-    // 유저 이미지 불러오기
+    // 유저 이미지 삭제
     @FormUrlEncoded
     @POST("deleteUserImage.php")
     fun deleteUserImage(
@@ -88,9 +88,9 @@ interface RetrofitUtil {
     fun writeBoard(
             @Field("USEREMAIL") userEmail: String,
             @Field("USERNAME") userName: String,
+            @Field("USERIMAGE") userImage: String,
             @Field("TYPE") type: String,
             @Field("UUID") uuid: String,
-            @Field("TITLE") title: String,
             @Field("CONTENT") content: String,
             @Field("IMAGE1") image1: String,
             @Field("IMAGE2") image2: String,
@@ -102,7 +102,50 @@ interface RetrofitUtil {
             @Field("IMAGENAME3") imageName3: String,
             @Field("IMAGENAME4") imageName4: String,
             @Field("IMAGENAME5") imageName5: String,
-            @Field("IMAGECOUNT") imageCount: String,
             @Field("TIME") time: String,
+    ): Call<String>
+
+    // 게시글 불러오기
+    @FormUrlEncoded
+    @POST("loadBoardData.php")
+    fun loadBoardData(
+            @Field("TYPE") type: String,
+            @Field("NO") no: Int
+     ): Call<String>
+
+    // 게시글 작성
+    @FormUrlEncoded
+    @POST("writeComment.php")
+    fun writeComment(
+            @Field("TYPE") type: String,
+            @Field("UUIDBOARD") uuidBoard: String,
+            @Field("UUIDCOMMENT") uuidComment: String,
+            @Field("USEREMAIL") userEmail: String,
+            @Field("USERNAME") userName: String,
+            @Field("USERIMAGE") userImage: String,
+            @Field("CONTENT") comment: String,
+            @Field("TIME") time: String
+    ): Call<String>
+
+    // 댓글 불러오기
+    @FormUrlEncoded
+    @POST("loadCommentData.php")
+    fun loadCommentData(
+            @Field("UUIDBOARD") uuidBoard: String,
+            @Field("TYPE") type: String
+    ): Call<String>
+
+    // 게시글 개수
+    @FormUrlEncoded
+    @POST("loadBoardCount.php")
+    fun loadBoardCount(
+            @Field("TYPE") no: String
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("changeBoardCount.php")
+    fun changeBoardCount(
+            @Field("COMMENT") comment: Int,
+            @Field("UUID") uuid: String
     ): Call<String>
 }

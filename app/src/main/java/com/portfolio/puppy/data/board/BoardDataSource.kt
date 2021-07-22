@@ -1,13 +1,18 @@
 package com.portfolio.puppy.data.board
 
 import android.util.Log
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonArray
 import com.portfolio.puppy.util.RetrofitUtil
 import io.reactivex.Completable
+import io.reactivex.Single
+import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 class BoardDataSource {
@@ -15,9 +20,9 @@ class BoardDataSource {
     // 게시글 작성
     fun writeBoard(email: String,
                    name: String,
+                   imageName: String,
                    type: String,
                    uuid: String,
-                   title: String,
                    content: String,
                    image1: String,
                    image2: String,
@@ -29,13 +34,12 @@ class BoardDataSource {
                    imageName3: String,
                    imageName4: String,
                    imageName5: String,
-                   imageCount: Int,
                    time: String
                    ) = Completable.create {
         val retrofit = retrofitBuilder()
         val api = retrofit.create(RetrofitUtil::class.java)
 
-        api.writeBoard(email, name, type, uuid, title, content, image1, image2, image3, image4, image5, imageName1, imageName2, imageName3, imageName4, imageName5, imageCount.toString(), time)
+        api.writeBoard(email, name, imageName, type, uuid, content, image1, image2, image3, image4, image5, imageName1, imageName2, imageName3, imageName4, imageName5, time)
                 .enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful && response.body() != null) {
@@ -55,6 +59,111 @@ class BoardDataSource {
             override fun onFailure(call: Call<String>, t: Throwable) {
                 Log.e("BoardViewModel", "writeBoard 에러")
                 t.printStackTrace()
+            }
+        })
+    }
+
+    // 게시글 불러오기
+    fun loadBoardData(type: String, no: Int) = Single.create<JSONArray> {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitUtil::class.java)
+
+        api.loadBoardData(type, no).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val jArray = JSONArray(response.body().toString())
+                    it.onSuccess(jArray)
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e("BoardViewModel", "loadBoardData 에러")
+                it.onError(t)
+            }
+        })
+    }
+    
+    // 댓글 작성
+    fun writeComment(type: String, uuidBoard: String, uuidComment: String, email: String, name: String, image: String, comment: String, time: String) = Completable.create {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitUtil::class.java)
+
+        api.writeComment(type, uuidBoard, uuidComment, email, name, image, comment, time).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val jsonObject = JSONObject(response.body().toString())
+                    if (jsonObject.optString("result").equals("true")) {
+                        it.onComplete()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e("BoardViewModel", "writeComment 에러")
+                it.onError(t)
+            }
+        })
+    }
+
+    // 댓글 불러오기
+    fun loadCommentData(uuid: String, type: String) = Single.create<JSONArray> {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitUtil::class.java)
+
+        api.loadCommentData(uuid, type).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val jArray = JSONArray(response.body().toString())
+                    it.onSuccess(jArray)
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e("BoardViewModel", "loadCommentData 에러")
+                it.onError(t)
+            }
+        })
+    }
+
+    // 게시글 개수 불러오기
+    fun loadBoardCount(type: String) = Single.create<Int> {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitUtil::class.java)
+
+        api.loadBoardCount(type).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val jsonObject = JSONObject(response.body().toString())
+                    if (jsonObject.optString("result").equals("true")) {
+                        it.onSuccess(jsonObject.optInt("no"))
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e("BoardViewModel", "loadBoardCount 에러")
+                it.onError(t)
+            }
+        })
+    }
+
+    fun changeBoardCount(comment: Int, uuid: String) = Completable.create() {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitUtil::class.java)
+
+        api.changeBoardCount(comment, uuid).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val jsonObject = JSONObject(response.body().toString())
+                    if (jsonObject.optString("result").equals("true")) {
+                        it.onComplete()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e("BoardViewModel", "loadBoardCount 에러")
+                it.onError(t)
             }
         })
     }
