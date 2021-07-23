@@ -13,16 +13,44 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorOnPrimary"
         android:orientation="vertical"
         tools:context=".DashBoardFragment">
 
-        <TextView
-            style="@style/textView_title"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="@string/dashboard_free" />
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/textView_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/dashboard_free" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/color_pink">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:text="Free"
+                    android:textColor="@color/white"
+                    android:textSize="8sp"
+                    android:textStyle="bold"
+                    tools:ignore="SmallSp" />
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_dashBoard_free"
@@ -31,14 +59,17 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="?attr/colorOnPrimary"
             app:cardCornerRadius="4dp"
             app:cardElevation="4dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_dashBoard_free"
                 android:layout_width="match_parent"
-                android:layout_height="200dp" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>

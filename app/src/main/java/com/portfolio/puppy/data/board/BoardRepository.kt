@@ -7,15 +7,15 @@ import java.util.*
 class BoardRepository(private val dataSource: BoardDataSource, private val context: Context) {
     private val time = System.currentTimeMillis().toString()
 
-    fun getEmail(): String {
+    private fun getEmail(): String {
         return PreferencesUtil(context).getEmail()
     }
 
-    fun getName(): String {
+    private fun getName(): String {
         return PreferencesUtil(context).getName()
     }
 
-    fun getProfileImage(): String {
+    private fun getProfileImage(): String {
         return PreferencesUtil(context).getProfileImage()
     }
 
@@ -46,4 +46,7 @@ class BoardRepository(private val dataSource: BoardDataSource, private val conte
 
     fun changeBoardCount(comment: Int, uuid: String) =
             dataSource.changeBoardCount(comment, uuid)
+
+    fun loadBoardData(type: String) =
+            dataSource.loadBoardData(type)
 }

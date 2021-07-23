@@ -148,4 +148,10 @@ interface RetrofitUtil {
             @Field("COMMENT") comment: Int,
             @Field("UUID") uuid: String
     ): Call<String>
+
+    @FormUrlEncoded
+    @POST("loadBoardData2.php")
+    fun loadBoardData2(
+            @Field("TYPE") type: String
+    ): Call<String>
 }

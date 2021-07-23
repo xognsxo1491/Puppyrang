@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 
 public class ImageUtil {
 
+    // 이미지 리사이징
     public Bitmap resize(Context context, Uri uri, int resize) {
         Bitmap resizeBitmap = null;
 
@@ -61,6 +62,7 @@ public class ImageUtil {
         return bitmap;
     }
 
+    // bitmap to string
     public String bitmapToString(Bitmap bitmap) {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

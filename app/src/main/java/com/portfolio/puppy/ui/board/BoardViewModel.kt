@@ -17,13 +17,15 @@ import org.json.JSONObject
 class BoardViewModel(private val repository: BoardRepository) : ViewModel() {
     private val mDisposable = CompositeDisposable()
     lateinit var mSuccess: MutableLiveData<Boolean>
-    lateinit var mError: MutableLiveData<String>
+    lateinit var mError: MutableLiveData<String> // 에러 메세지
     lateinit var mIsWrite: MutableLiveData<Boolean> // 게시글 작성 양식 체크
-    lateinit var mCountBoard: MutableLiveData<Int>
-    lateinit var mCountComment: MutableLiveData<Int>
-    lateinit var mLoadComment: MutableLiveData<Boolean>
-    lateinit var mComment: MutableLiveData<JSONArray>
+    lateinit var mCountBoard: MutableLiveData<Int> // 게시글 개수
+    lateinit var mLoadComment: MutableLiveData<Boolean> // 댓글 작성 성공 여부
+    lateinit var mComment: MutableLiveData<JSONArray> // 댓글 정보
 
+    lateinit var mLoadFree: MutableLiveData<JSONArray>
+
+    // 게시글 페이징 플로우
     fun flowBoard(type: String): Flow<PagingData<JSONObject>> {
         return Pager(PagingConfig(1)) {
             BoardPagingSource(mCountBoard.value!!, type)
@@ -89,6 +91,21 @@ class BoardViewModel(private val repository: BoardRepository) : ViewModel() {
                            mComment.value = it
                 }, {
                     mError.value = "댓글을 불러오는데 실패하였습니다."
+                })
+
+        mDisposable.add(data)
+    }
+
+    fun loadBoardData(type: String) {
+        val data = repository.loadBoardData(type)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                           when (type) {
+                               "free" -> mLoadFree.value = it
+                           }
+                }, {
+                    mError.value = "게시글을 불러오는데 실패하였습니다."
                 })
 
         mDisposable.add(data)

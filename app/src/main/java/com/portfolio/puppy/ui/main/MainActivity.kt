@@ -32,7 +32,7 @@ import org.kodein.di.generic.instance
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity(), KodeinAware {
-    private val userImageUri = "https://puppyrang0222.cafe24.com/puppyrang/images/profile/" // 변경 필요
+    private val userImageUri = "***" // 변경 필요
 
     override val kodein by kodein()
     private val factory: MainViewModelFactory by instance()

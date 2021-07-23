@@ -12,7 +12,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 class MainDataSource {
 
-    // 프로필 이미지 불러오기
+    // 프로필 이미지 로드
     fun loadUserImage(email: String) = Single.create<String> {
         val retrofit = retrofitBuilder()
         val api = retrofit.create(RetrofitUtil::class.java)

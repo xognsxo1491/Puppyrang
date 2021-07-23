@@ -1,6 +1,5 @@
 package com.portfolio.puppy.data.board
 
-import android.util.Log
 import androidx.paging.PagingState
 import androidx.paging.rxjava2.RxPagingSource
 import io.reactivex.Single
@@ -9,16 +8,16 @@ import io.reactivex.schedulers.Schedulers
 import org.json.JSONArray
 import org.json.JSONObject
 
-// 게시글 목록 페이징
-class BoardPagingSource(private val no: Int, val type: String) : RxPagingSource<Int, JSONObject>() {
+// 게시글 불러오기 페이징
+class BoardPagingSource(private val number: Int, val type: String) : RxPagingSource<Int, JSONObject>() {
     private lateinit var list: ArrayList<JSONObject>
 
     override fun getRefreshKey(state: PagingState<Int, JSONObject>): Int {
-        return no
+        return number
     }
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, JSONObject>> {
-        val param = params.key ?: no
+        val param = params.key ?: number
 
         return BoardDataSource().loadBoardData(type, param)
                 .subscribeOn(Schedulers.io())
@@ -35,8 +34,7 @@ class BoardPagingSource(private val no: Int, val type: String) : RxPagingSource<
                 list.add(jsonArray.getJSONObject(i))
             }
 
-            LoadResult.Page(list, null, pageNumber - 2)
-
+            LoadResult.Page(list, null, pageNumber - 20) // 게시글 개수 (20개로 셋팅)
         } else {
             LoadResult.Page(list, null, null)
         }

@@ -57,12 +57,11 @@ class BoardActivity : AppCompatActivity(), KodeinAware {
             "free" -> mBinding.textBoardTitle.text = getString(R.string.dashboard_free) // 자유 게시판
         }
 
-        mBinding.fabBoard.setOnClickListener { // 게시글 작성
+        mBinding.fabBoard.setOnClickListener { // 게시글 fab
             val intent = Intent(this, BoardWriteActivity::class.java)
             intent.putExtra("board", valueBoard)
             startActivity(intent)
         }
-
 
         val boardAdapter = BoardAdapter()
         mBinding.recyclerBoard.adapter = boardAdapter
@@ -175,10 +174,19 @@ class BoardActivity : AppCompatActivity(), KodeinAware {
 
                 if (mLayout.panelState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
                     val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(View(this@BoardActivity).windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+                    imm.hideSoftInputFromWindow(currentFocus!!.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+
+                    mBinding.textInputLayoutBoardComment.editText!!.text.clear()
                 }
             }
         })
+
+        // 댓글창 닫기 버튼
+        mBinding.imageSlideClose.setOnClickListener {
+            if (mLayout.panelState == SlidingUpPanelLayout.PanelState.ANCHORED || mLayout.panelState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                mLayout.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

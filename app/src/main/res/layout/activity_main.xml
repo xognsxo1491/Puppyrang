@@ -14,13 +14,13 @@
         android:id="@+id/layout_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorOnPrimary">
+        android:background="?attr/colorSecondary">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNav_main"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="?attr/colorOnPrimary"
+            android:background="?attr/colorSecondary"
             app:itemIconTint="@color/color_bottom_nav"
             app:itemTextColor="@color/color_bottom_nav"
             app:layout_constraintBottom_toBottomOf="parent"

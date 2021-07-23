@@ -25,7 +25,7 @@ import org.kodein.di.generic.instance
 import java.util.*
 
 class EditProfileActivity : AppCompatActivity(), KodeinAware {
-    private val userImageUri = "https://puppyrang0222.cafe24.com/puppyrang/images/profile/" // 변경필요
+    private val userImageUri = "***" // 변경필요
 
     override val kodein by kodein()
     private val factory: UserViewModelFactory by instance()

@@ -1,8 +1,6 @@
 package com.portfolio.puppy.data.board
 
 import android.util.Log
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonArray
 import com.portfolio.puppy.util.RetrofitUtil
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -12,7 +10,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 class BoardDataSource {
@@ -63,12 +60,32 @@ class BoardDataSource {
         })
     }
 
-    // 게시글 불러오기
+    // 게시글 로드 (페이징)
     fun loadBoardData(type: String, no: Int) = Single.create<JSONArray> {
         val retrofit = retrofitBuilder()
         val api = retrofit.create(RetrofitUtil::class.java)
 
         api.loadBoardData(type, no).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val jArray = JSONArray(response.body().toString())
+                    it.onSuccess(jArray)
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e("BoardViewModel", "loadBoardData 에러")
+                it.onError(t)
+            }
+        })
+    }
+
+    // 게시글 로드 (메인 화면)
+    fun loadBoardData(type: String) = Single.create<JSONArray> {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitUtil::class.java)
+
+        api.loadBoardData2(type).enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful && response.body() != null) {
                     val jArray = JSONArray(response.body().toString())
@@ -105,7 +122,7 @@ class BoardDataSource {
         })
     }
 
-    // 댓글 불러오기
+    // 댓글 로드
     fun loadCommentData(uuid: String, type: String) = Single.create<JSONArray> {
         val retrofit = retrofitBuilder()
         val api = retrofit.create(RetrofitUtil::class.java)
@@ -125,7 +142,7 @@ class BoardDataSource {
         })
     }
 
-    // 게시글 개수 불러오기
+    // 게시글 개수 로드
     fun loadBoardCount(type: String) = Single.create<Int> {
         val retrofit = retrofitBuilder()
         val api = retrofit.create(RetrofitUtil::class.java)
@@ -147,6 +164,7 @@ class BoardDataSource {
         })
     }
 
+    // 개시글 개수 변경
     fun changeBoardCount(comment: Int, uuid: String) = Completable.create() {
         val retrofit = retrofitBuilder()
         val api = retrofit.create(RetrofitUtil::class.java)
@@ -168,6 +186,7 @@ class BoardDataSource {
         })
     }
 
+    // 레트로핏 빌더
     private fun retrofitBuilder(): Retrofit {
         return Retrofit.Builder()
                 .baseUrl(RetrofitUtil.URL)

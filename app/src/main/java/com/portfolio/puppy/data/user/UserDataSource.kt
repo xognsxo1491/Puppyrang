@@ -263,6 +263,7 @@ class UserDataSource {
         }
     }
 
+    // 프로필 수정
     fun changeAuth(email: String) = Single.create<Boolean> {
         val retrofit = retrofitBuilder()
         val api = retrofit.create(RetrofitUtil::class.java)
