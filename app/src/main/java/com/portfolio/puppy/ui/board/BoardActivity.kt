@@ -63,20 +63,43 @@ class BoardActivity : AppCompatActivity(), KodeinAware {
             startActivity(intent)
         }
 
-        val boardAdapter = BoardAdapter()
+        val boardAdapter = BoardAdapter(this)
         mBinding.recyclerBoard.adapter = boardAdapter
 
         mViewModel.mCountBoard = MutableLiveData()
         mViewModel.mCountBoard.observe(this, {
             if (it != 1) {
                 // 페이징
-                ///////////////////////////////////////////////////////////////////////////
                 lifecycleScope.launch {
                     mViewModel.flowBoard(valueBoard).collectLatest { emitter ->
                         boardAdapter.submitData(emitter)
                     }
                 }
-                ///////////////////////////////////////////////////////////////////////////
+            }
+        })
+
+        // 좋아요 리스트 불러오기
+        mViewModel.loadRecommend()
+        mViewModel.mRecommend = MutableLiveData()
+        mViewModel.mRecommend.observe(this, {
+            if (it != null) {
+                boardAdapter.mArray = MutableLiveData()
+                boardAdapter.mArray.value = it
+            }
+        })
+
+        // 좋아요 표시
+        boardAdapter.mRecommend = MutableLiveData()
+        boardAdapter.mRecommend.observe(this, {
+            if (it != null && it.contains("true")) {
+                val str = it.split("true")[0]
+                mViewModel.recommend(str)
+                mViewModel.changeRecommendCountPlus(str)
+
+            } else if (it != null && it.contains("false")) {
+                val str = it.split("false")[0]
+                mViewModel.oppose(str)
+                mViewModel.changeRecommendCountMinus(str)
             }
         })
 
@@ -103,8 +126,8 @@ class BoardActivity : AppCompatActivity(), KodeinAware {
         }
 
         // 오류 발생 메세지
-        mViewModel.mError = MutableLiveData()
-        mViewModel.mError.observe(this, {
+        mViewModel.mMessage = MutableLiveData()
+        mViewModel.mMessage.observe(this, {
             Snackbar.make(mBinding.layoutBoard, it, Snackbar.LENGTH_LONG).show()
         })
 
@@ -118,7 +141,7 @@ class BoardActivity : AppCompatActivity(), KodeinAware {
         mViewModel.mLoadComment.observe(this, {
             if (it) {
                 // 키보드 내리기
-                mViewModel.changeBoardCount(0, uuid)
+                mViewModel.changeBoardCountPlus(uuid)
 
                 val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(currentFocus!!.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
@@ -142,18 +165,32 @@ class BoardActivity : AppCompatActivity(), KodeinAware {
 
         // 댓글 불러오기
         mViewModel.mComment = MutableLiveData()
-        mViewModel.mComment.observe(this, {
+        mViewModel.mComment.observe(this, { emitter ->
             list = ArrayList()
 
-            if (!it.isNull(0)) {
-                for (i: Int in 0 until it.length()) {
-                    list.add(it.getJSONObject(i))
+            if (!emitter.isNull(0)) {
+                for (i: Int in 0 until emitter.length()) {
+                    list.add(emitter.getJSONObject(i))
                 }
             }
 
             commentAdapter = BoardCommentAdapter(list)
             mBinding.recyclerComment.adapter = commentAdapter
             commentAdapter.notifyDataSetChanged()
+
+            commentAdapter.mUUID = MutableLiveData()
+            commentAdapter.mUUID.observe(this, {
+                    mViewModel.deleteCommentData(commentAdapter.mUUID.value.toString(), 1)
+            })
+
+            mViewModel.mDelete = MutableLiveData()
+            mViewModel.mDelete.observe(this, {
+                if (it) {
+                    Snackbar.make(mBinding.layoutBoard, getString(R.string.delete_comment), Snackbar.LENGTH_LONG).show()
+                    commentAdapter.setInVisible()
+                    mViewModel.changeBoardCountMinus(uuid)
+                }
+            })
         })
 
         // 댓글 새로 고침
@@ -168,11 +205,13 @@ class BoardActivity : AppCompatActivity(), KodeinAware {
 
             override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
                 if (mLayout.panelState == SlidingUpPanelLayout.PanelState.ANCHORED || mLayout.panelState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    mBinding.refreshComment.isEnabled = false // 게시글 새로고침 막기
                     mBinding.textInputLayoutBoardComment.editText!!.requestFocus()
                     mBinding.slide.isTouchEnabled = false
                 }
 
                 if (mLayout.panelState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                    mBinding.refreshComment.isEnabled = true // 게시글 새로고침 열기
                     val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(currentFocus!!.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
 
@@ -187,6 +226,14 @@ class BoardActivity : AppCompatActivity(), KodeinAware {
                 mLayout.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
             }
         }
+
+        boardAdapter.mDelete = MutableLiveData()
+        boardAdapter.mDelete.observe(this, {
+            if (it != null) {
+                mViewModel.deleteBoardData(it, valueBoard)
+                mViewModel.deleteCommentData(it, 2)
+            }
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

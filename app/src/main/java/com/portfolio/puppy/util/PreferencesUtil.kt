@@ -2,6 +2,7 @@ package com.portfolio.puppy.util
 
 import android.annotation.SuppressLint
 import android.content.Context
+import java.util.*
 
 class PreferencesUtil(val context: Context) {
 
@@ -84,6 +85,7 @@ class PreferencesUtil(val context: Context) {
         edit.commit()
     }
 
+    // 프로필 사진 지우기
     fun deleteUserImage() {
         val pref = context.getSharedPreferences("user", Context.MODE_PRIVATE)
         val edit = pref.edit()

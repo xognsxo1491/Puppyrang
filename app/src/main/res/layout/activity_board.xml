@@ -18,7 +18,7 @@
         android:gravity="bottom"
         app:umanoDragView="@id/layout_slide"
         app:umanoOverlay="true"
-        app:umanoPanelHeight="15dp"
+        app:umanoPanelHeight="0dp"
         app:umanoShadowHeight="8dp"
         tools:context=".ui.board.BoardActivity">
 
@@ -172,7 +172,7 @@
                         android:id="@+id/image_board_send"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="22dp"
+                        android:layout_marginTop="25dp"
                         android:layout_marginEnd="14dp"
                         android:visibility="invisible"
                         app:layout_constraintEnd_toEndOf="parent"

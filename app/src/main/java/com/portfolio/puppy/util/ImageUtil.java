@@ -35,7 +35,8 @@ public class ImageUtil {
             }
 
             options.inSampleSize = samplesize;
-            resizeBitmap = BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri), null, options);
+            resizeBitmap = BitmapFactory
+                    .decodeStream(context.getContentResolver().openInputStream(uri), null, options);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

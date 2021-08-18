@@ -10,9 +10,8 @@ import javax.mail.internet.MimeMessage
  * Proguard 수정 필요 */
 
 class EmailUtil {
-    /* 변경 필요 */
-    private val mEmail: String = "***" // 보내는 이메일
-    private val mPw: String = "***" // 이메일 패스워드
+    private val mEmail: String = "withpuppyapp@gmail.com" // 보내는 이메일 (변경 필요)
+    private val mPw: String =  "mulbang@995" // 이메일 패스워드 (변경 필요)
 
     fun sendEmail(
         title: String,      // 메일 제목

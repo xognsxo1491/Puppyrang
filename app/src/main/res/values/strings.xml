@@ -12,7 +12,11 @@
     <string name="find_pet">강아지를 찾습니다</string>
     <string name="more">더보기</string>
     <string name="dashboard_free">자유 게시판</string>
+    <string name="dashboard_anonymous">익명 게시판</string>
+    <string name="dashbard_promotion">홍보 게시판</string>
+    <string name="dashbard_preview">지역 시사</string>
 
+    <string name="board">유저들과 다양한 이야기를 나눠보세요.</string>
     <string name="show_comment">댓글 보기</string>
     <string name="insert_comment">댓글 입력</string>
     <string name="success_comment">댓글이 작성되었습니다.</string>
@@ -58,6 +62,7 @@
     <string name="nickName_error">2~8자 사이로 지어주세요.</string>
     <string name="pw_validate">이미 사용중인 이메일입니다.</string>
     <string name="pw_certification_error">비밀번호가 일치하지 않습니다.</string>
+    <string name="delete_comment">댓글을 삭제하였습니다.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -116,9 +116,11 @@ class BoardWriteActivity : AppCompatActivity(), KodeinAware {
         mViewModel.mIsWrite = MutableLiveData(false)
         mViewModel.mIsWrite.observe(this, {
             if (it) {
-                mBinding.textViewBoardWriteSubmit.setTextColor(ContextCompat.getColor(this, R.color.color_blue))
+                mBinding.textViewBoardWriteSubmit
+                        .setTextColor(ContextCompat.getColor(this, R.color.color_blue))
             } else {
-                mBinding.textViewBoardWriteSubmit.setTextColor(ContextCompat.getColor(this, R.color.color_gray))
+                mBinding.textViewBoardWriteSubmit
+                        .setTextColor(ContextCompat.getColor(this, R.color.color_gray))
             }
         })
 
@@ -190,8 +192,8 @@ class BoardWriteActivity : AppCompatActivity(), KodeinAware {
             mViewModel.mIsWrite.value = it!!.length in 1..1000
         }
 
-        mViewModel.mError = MutableLiveData()
-        mViewModel.mError.observe(this, {
+        mViewModel.mMessage = MutableLiveData()
+        mViewModel.mMessage.observe(this, {
             Snackbar.make(mBinding.layoutBoardWrite, it, Snackbar.LENGTH_LONG).show()
         })
     }

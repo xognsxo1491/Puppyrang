@@ -135,6 +135,19 @@ interface RetrofitUtil {
             @Field("TYPE") type: String
     ): Call<String>
 
+    // 댓글 삭제
+    @FormUrlEncoded
+    @POST("deleteCommentData.php")
+    fun deleteCommentData(
+            @Field("UUID") uuid: String
+    ): Call<String>
+
+    @FormUrlEncoded
+    @POST("deleteCommentData2.php")
+    fun deleteCommentData2(
+            @Field("UUID") uuid: String
+    ): Call<String>
+
     // 게시글 개수
     @FormUrlEncoded
     @POST("loadBoardCount.php")
@@ -142,16 +155,72 @@ interface RetrofitUtil {
             @Field("TYPE") no: String
     ): Call<String>
 
+    // 게시글 개수 (증가)
     @FormUrlEncoded
-    @POST("changeBoardCount.php")
-    fun changeBoardCount(
-            @Field("COMMENT") comment: Int,
+    @POST("changeBoardCountPlus.php")
+    fun changeBoardCountPlus(
             @Field("UUID") uuid: String
     ): Call<String>
 
+    // 게시글 개수 (감소)
+    @FormUrlEncoded
+    @POST("changeBoardCountMinus.php")
+    fun changeBoardCountMinus(
+            @Field("UUID") uuid: String
+    ): Call<String>
+
+    // 게시글 로드
     @FormUrlEncoded
     @POST("loadBoardData2.php")
     fun loadBoardData2(
+            @Field("TYPE") type: String
+    ): Call<String>
+
+    // 좋아요
+    @FormUrlEncoded
+    @POST("recommend.php")
+    fun recommend(
+            @Field("USEREMAIL") userEmail: String,
+            @Field("USERNAME") userName: String,
+            @Field("UUID") uuid: String,
+    ): Call<String>
+
+    // 좋아요 취소
+    @FormUrlEncoded
+    @POST("oppose.php")
+    fun oppose(
+            @Field("USEREMAIL") userEmail: String,
+            @Field("USERNAME") userName: String,
+            @Field("UUID") uuid: String
+    ): Call<String>
+
+    // 좋아요 불러오기
+    @FormUrlEncoded
+    @POST("loadRecommend.php")
+    fun loadRecommend(
+            @Field("USEREMAIL") userEmail: String,
+            @Field("USERNAME") userName: String
+    ): Call<String>
+
+    // 좋아요 개수 (증가)
+    @FormUrlEncoded
+    @POST("changeRecommendCountPlus.php")
+    fun changeRecommendCountPlus(
+            @Field("UUID") uuid: String
+    ): Call<String>
+
+    // 좋아요 개수 (감소)
+    @FormUrlEncoded
+    @POST("changeRecommendCountMinus.php")
+    fun changeRecommendCountMinus(
+            @Field("UUID") uuid: String
+    ): Call<String>
+
+    // 게시글 삭제
+    @FormUrlEncoded
+    @POST("deleteBoardData.php")
+    fun deleteBoardData(
+            @Field("UUID") uuid: String,
             @Field("TYPE") type: String
     ): Call<String>
 }

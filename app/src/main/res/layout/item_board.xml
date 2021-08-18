@@ -15,8 +15,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
         app:cardBackgroundColor="?attr/colorOnPrimary"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="1dp">
+        app:cardCornerRadius="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -93,23 +92,23 @@
                     android:orientation="horizontal">
 
                     <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         app:cardBackgroundColor="@color/color_dark_deep"
                         app:cardCornerRadius="4dp">
 
                         <ImageView
                             android:id="@+id/image_board_im1"
-                            android:layout_width="130dp"
-                            android:layout_height="130dp"
+                            android:layout_width="250dp"
+                            android:layout_height="200dp"
                             android:scaleType="fitXY"
                             android:visibility="gone"
                             tools:ignore="ContentDescription" />
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         app:cardBackgroundColor="@color/color_dark_deep"
                         app:cardCornerRadius="4dp">
@@ -124,8 +123,8 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         app:cardBackgroundColor="@color/color_dark_deep"
                         app:cardCornerRadius="4dp">
@@ -141,7 +140,7 @@
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         app:cardBackgroundColor="@color/color_dark_deep"
                         app:cardCornerRadius="4dp">
@@ -157,7 +156,7 @@
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         app:cardBackgroundColor="@color/color_dark_deep"
                         app:cardCornerRadius="4dp">
@@ -202,6 +201,7 @@
                 android:orientation="horizontal">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/card_board_recommend"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
@@ -218,8 +218,9 @@
                         tools:ignore="UseCompoundDrawables">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/image_item_board_recommend"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
                             android:layout_marginStart="6dp"
                             android:layout_marginTop="6dp"
                             android:layout_marginEnd="4dp"
@@ -232,7 +233,7 @@
                             android:layout_width="25dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:layout_marginEnd="4dp"
+                            android:layout_marginEnd="6dp"
                             android:gravity="center"
                             android:textColor="?attr/colorPrimary"
                             android:textSize="12sp" />
@@ -257,8 +258,8 @@
                         tools:ignore="UseCompoundDrawables">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="6dp"
                             android:layout_marginEnd="4dp"

@@ -41,12 +41,33 @@ class BoardRepository(private val dataSource: BoardDataSource, private val conte
     fun loadCommentData(uuid: String, type: String) =
             dataSource.loadCommentData(uuid, type)
 
+    fun deleteCommentData(uuid: String, value: Int) =
+            dataSource.deleteComment(uuid, value)
+
     fun loadBoardCount(type: String) =
             dataSource.loadBoardCount(type)
 
-    fun changeBoardCount(comment: Int, uuid: String) =
-            dataSource.changeBoardCount(comment, uuid)
+    fun changeBoardCountPlus(uuid: String) =
+            dataSource.changeBoardCountPlus(uuid)
 
-    fun loadBoardData(type: String) =
-            dataSource.loadBoardData(type)
+    fun changeBoardCountMinus(uuid: String) =
+            dataSource.changeBoardCountMinus(uuid)
+
+    fun recommend(uuid: String) =
+            dataSource.recommend(getEmail(), getName(), uuid)
+
+    fun oppose(uuid: String) =
+            dataSource.oppose(getEmail(), getName(), uuid)
+
+    fun loadRecommend() =
+            dataSource.loadRecommend(getEmail(), getName())
+
+    fun changeRecommendCountPlus(uuid: String) =
+            dataSource.changeRecommendCountPlus(uuid)
+
+    fun changeRecommendCountMinus(uuid: String) =
+            dataSource.changeRecommendCountMinus(uuid)
+
+    fun deleteBoardData(uuid: String, type: String) =
+            dataSource.deleteBoardData(uuid, type)
 }

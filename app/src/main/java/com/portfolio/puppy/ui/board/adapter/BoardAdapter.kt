@@ -2,6 +2,7 @@ package com.portfolio.puppy.ui.board.adapter
 
 import android.app.AlertDialog
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -17,14 +19,19 @@ import com.bumptech.glide.Glide
 import com.portfolio.puppy.R
 import com.portfolio.puppy.util.PreferencesUtil
 import com.portfolio.puppy.util.TimeFormatUtil
+import org.json.JSONArray
 import org.json.JSONObject
 
 // 게시글 어댑터
-class BoardAdapter: PagingDataAdapter<JSONObject, BoardAdapter.ViewHolder>(USER_COMPARATOR) {
-    private val userImageUri = "***" // 변경 필요
-    private val boardUri = "***" // 변경 필요
+class BoardAdapter(owner: LifecycleOwner): PagingDataAdapter<JSONObject, BoardAdapter.ViewHolder>(USER_COMPARATOR) {
+    private val userImageUri =  "https://puppyrang0222.cafe24.com/puppyrang/images/profile/" // 변경 필요
+    private val boardUri =  "https://puppyrang0222.cafe24.com/puppyrang/images/" // 변경 필요
     private lateinit var mContext: Context
+    private var mOwner: LifecycleOwner = owner
     lateinit var mSlide: MutableLiveData<String> // 슬라이드뷰에 uuid 전달
+    lateinit var mRecommend: MutableLiveData<String> // 좋아요
+    lateinit var mArray: MutableLiveData<JSONArray> // 좋아요 리스트
+    lateinit var mDelete: MutableLiveData<String> // 게시글 삭제
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.context
@@ -59,19 +66,20 @@ class BoardAdapter: PagingDataAdapter<JSONObject, BoardAdapter.ViewHolder>(USER_
 
             holder.card.setOnLongClickListener {
                if (PreferencesUtil(mContext).getEmail() == item.optString("user_email")) {
-                   val items = arrayOf<CharSequence>("이미지 삭제")
-
+                   val items = arrayOf<CharSequence>("게시글 삭제")
                    val builder = AlertDialog.Builder(mContext)
-                   builder.setItems(items) { _, which ->
-                       
+
+                   builder.setItems(items) { _, _ ->
+                       holder.card.visibility = View.GONE
+                       mDelete.value = item.optString("uuid")
                    }.create().show()
                }
 
                 else {
                    val items = arrayOf<CharSequence>("쪽지 보내기")
-
                    val builder = AlertDialog.Builder(mContext)
-                   builder.setItems(items) { _, which ->
+
+                   builder.setItems(items) { _, _ ->
 
                    }.create().show()
                }
@@ -79,8 +87,25 @@ class BoardAdapter: PagingDataAdapter<JSONObject, BoardAdapter.ViewHolder>(USER_
                 return@setOnLongClickListener true
             }
 
-            holder.cardComment.setOnClickListener {
+            holder.cardComment.setOnClickListener { // 댓글창 보기
                 mSlide.value = item.optString("uuid")
+            }
+
+            holder.cardRecommend.setOnClickListener { // 좋아요
+                val count = holder.recommend.text
+
+                if (holder.imageRecommend.tag == "true") {
+                    holder.imageRecommend.setImageResource(R.drawable.ic_favorite_border_24)
+                    mRecommend.value = item.optString("uuid") + "false"
+                    holder.imageRecommend.tag = "false"
+                    holder.recommend.text = (count.toString().toInt() - 1).toString()
+
+                } else if (holder.imageRecommend.tag == "false") {
+                    holder.imageRecommend.setImageResource(R.drawable.ic_favorite_24)
+                    mRecommend.value = item.optString("uuid") + "true"
+                    holder.imageRecommend.tag = "true"
+                    holder.recommend.text = (count.toString().toInt() + 1).toString()
+                }
             }
 
             if (item.optString("user_image") != "null") {
@@ -94,7 +119,7 @@ class BoardAdapter: PagingDataAdapter<JSONObject, BoardAdapter.ViewHolder>(USER_
                 holder.image1.visibility = View.VISIBLE
 
                 Glide.with(mContext)
-                        .load("$boardUri${item.optString("type")}/${item.optString("image1")}.jpg")
+                        .load("$boardUri${item.optString("type")}/${item.optString("uuid")}/${item.optString("image1")}.jpg")
                         .into(holder.image1)
             }
 
@@ -102,7 +127,7 @@ class BoardAdapter: PagingDataAdapter<JSONObject, BoardAdapter.ViewHolder>(USER_
                 holder.image2.visibility = View.VISIBLE
 
                 Glide.with(mContext)
-                        .load("$boardUri${item.optString("type")}/${item.optString("image2")}.jpg")
+                        .load("$boardUri${item.optString("type")}/${item.optString("uuid")}/${item.optString("image2")}.jpg")
                         .into(holder.image2)
             }
 
@@ -110,7 +135,7 @@ class BoardAdapter: PagingDataAdapter<JSONObject, BoardAdapter.ViewHolder>(USER_
                 holder.image3.visibility = View.VISIBLE
 
                 Glide.with(mContext)
-                        .load("$boardUri${item.optString("type")}/${item.optString("image3")}.jpg")
+                        .load("$boardUri${item.optString("type")}/${item.optString("uuid")}/${item.optString("image3")}.jpg")
                         .into(holder.image3)
             }
 
@@ -118,7 +143,7 @@ class BoardAdapter: PagingDataAdapter<JSONObject, BoardAdapter.ViewHolder>(USER_
                 holder.image4.visibility = View.VISIBLE
 
                 Glide.with(mContext)
-                        .load("$boardUri${item.optString("type")}/${item.optString("image4")}.jpg")
+                        .load("$boardUri${item.optString("type")}/${item.optString("uuid")}/${item.optString("image4")}.jpg")
                         .into(holder.image4)
             }
 
@@ -126,9 +151,22 @@ class BoardAdapter: PagingDataAdapter<JSONObject, BoardAdapter.ViewHolder>(USER_
                 holder.image5.visibility = View.VISIBLE
 
                 Glide.with(mContext)
-                        .load("$boardUri${item.optString("type")}/${item.optString("image5")}.jpg")
+                        .load("$boardUri${item.optString("type")}/${item.optString("uuid")}/${item.optString("image5")}.jpg")
                         .into(holder.image5)
             }
+
+            // 좋아요 리스트 불러오기
+            mArray.observe(mOwner, {
+                holder.imageRecommend.setImageResource(R.drawable.ic_favorite_border_24)
+                holder.imageRecommend.tag = "false"
+
+                for (i: Int in 0 until it.length()) {
+                    if (item.optString("uuid") == it.getJSONObject(i).optString("uuid")) {
+                        holder.imageRecommend.setImageResource(R.drawable.ic_favorite_24)
+                        holder.imageRecommend.tag = "true"
+                    }
+                }
+            })
         }
     }
 
@@ -141,7 +179,9 @@ class BoardAdapter: PagingDataAdapter<JSONObject, BoardAdapter.ViewHolder>(USER_
         val comment: TextView = view.findViewById(R.id.text_boardItem_comment) // 댓글 개수
         val card: CardView = view.findViewById(R.id.card_item_board) // 카드뷰
         val profile: ImageView = view.findViewById(R.id.image_item_board_profile) // 프로필 이미지
-        val cardComment: CardView = view.findViewById(R.id.card_board_comment) // 카드뷰
+        val cardComment: CardView = view.findViewById(R.id.card_board_comment) // 댓글 카드뷰
+        val cardRecommend: CardView = view.findViewById(R.id.card_board_recommend) // 좋아요 카드뷰
+        val imageRecommend: ImageView = view.findViewById(R.id.image_item_board_recommend) // 좋아요 이미지
 
         val image1: ImageView = view.findViewById(R.id.image_board_im1)
         val image2: ImageView = view.findViewById(R.id.image_board_im2)

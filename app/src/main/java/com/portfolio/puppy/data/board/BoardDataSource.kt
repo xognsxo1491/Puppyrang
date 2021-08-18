@@ -79,26 +79,6 @@ class BoardDataSource {
             }
         })
     }
-
-    // 게시글 로드 (메인 화면)
-    fun loadBoardData(type: String) = Single.create<JSONArray> {
-        val retrofit = retrofitBuilder()
-        val api = retrofit.create(RetrofitUtil::class.java)
-
-        api.loadBoardData2(type).enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                if (response.isSuccessful && response.body() != null) {
-                    val jArray = JSONArray(response.body().toString())
-                    it.onSuccess(jArray)
-                }
-            }
-
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                Log.e("BoardViewModel", "loadBoardData 에러")
-                it.onError(t)
-            }
-        })
-    }
     
     // 댓글 작성
     fun writeComment(type: String, uuidBoard: String, uuidComment: String, email: String, name: String, image: String, comment: String, time: String) = Completable.create {
@@ -120,6 +100,52 @@ class BoardDataSource {
                 it.onError(t)
             }
         })
+    }
+
+    // 댓글 삭제
+    fun deleteComment(uuid: String, value: Int) = Completable.create {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitUtil::class.java)
+
+        if (value == 1) {
+            api.deleteCommentData(uuid).enqueue(object : Callback<String> {
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val jsonObject = JSONObject(response.body().toString())
+
+                        if (jsonObject.optString("result").equals("true")) {
+                            Log.e("테스트", "성공")
+                            it.onComplete()
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    Log.e("BoardViewModel", "deleteComment 에러")
+                    it.onError(t)
+                }
+            })
+        }
+
+        else if (value == 2) {
+            api.deleteCommentData2(uuid).enqueue(object : Callback<String> {
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val jsonObject = JSONObject(response.body().toString())
+
+                        if (jsonObject.optString("result").equals("true")) {
+                            Log.e("테스트", "성공")
+                            it.onComplete()
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    Log.e("BoardViewModel", "deleteComment 에러")
+                    it.onError(t)
+                }
+            })
+        }
     }
 
     // 댓글 로드
@@ -165,11 +191,11 @@ class BoardDataSource {
     }
 
     // 개시글 개수 변경
-    fun changeBoardCount(comment: Int, uuid: String) = Completable.create() {
+    fun changeBoardCountPlus(uuid: String) = Completable.create {
         val retrofit = retrofitBuilder()
         val api = retrofit.create(RetrofitUtil::class.java)
 
-        api.changeBoardCount(comment, uuid).enqueue(object : Callback<String> {
+        api.changeBoardCountPlus(uuid).enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful && response.body() != null) {
                     val jsonObject = JSONObject(response.body().toString())
@@ -180,7 +206,160 @@ class BoardDataSource {
             }
 
             override fun onFailure(call: Call<String>, t: Throwable) {
-                Log.e("BoardViewModel", "loadBoardCount 에러")
+                Log.e("BoardViewModel", "changeBoardCountPlus 에러")
+                it.onError(t)
+            }
+        })
+    }
+
+    // 개시글 개수 변경
+    fun changeBoardCountMinus(uuid: String) = Completable.create {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitUtil::class.java)
+
+        api.changeBoardCountMinus(uuid).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val jsonObject = JSONObject(response.body().toString())
+                    if (jsonObject.optString("result").equals("true")) {
+                        it.onComplete()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e("BoardViewModel", "changeBoardCountMinus 에러")
+                it.onError(t)
+            }
+        })
+    }
+
+    // 좋아요
+    fun recommend(userEmail: String, userName: String, uuid: String) = Completable.create {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitUtil::class.java)
+
+        api.recommend(userEmail, userName, uuid).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val jsonObject = JSONObject(response.body().toString())
+                    if (jsonObject.optString("result").equals("true")) {
+                        it.onComplete()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e("BoardViewModel", "recommend 에러")
+                it.onError(t)
+            }
+        })
+    }
+
+    // 좋아요 취소
+    fun oppose(userEmail: String, userName: String, uuid: String) = Completable.create {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitUtil::class.java)
+
+        Log.e("테스트" ,"$userEmail and $userName and $uuid")
+
+        api.oppose(userEmail, userName, uuid).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val jsonObject = JSONObject(response.body().toString())
+                    if (jsonObject.optString("result").equals("true")) {
+                        it.onComplete()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e("BoardViewModel", "recommend 에러")
+                it.onError(t)
+            }
+        })
+    }
+
+    // 좋아요 불러오기
+    fun loadRecommend(userEmail: String, userName: String) = Single.create<JSONArray> {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitUtil::class.java)
+
+        api.loadRecommend(userEmail, userName).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val jArray = JSONArray(response.body().toString())
+                    it.onSuccess(jArray)
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e("BoardViewModel", "recommend 에러")
+                it.onError(t)
+            }
+        })
+    }
+
+    // 좋아요 개수 (증가)
+    fun changeRecommendCountPlus(uuid: String) = Completable.create {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitUtil::class.java)
+
+        api.changeRecommendCountPlus(uuid).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val jsonObject = JSONObject(response.body().toString())
+                    if (jsonObject.optString("result").equals("true")) {
+                        it.onComplete()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e("BoardViewModel", "changeRecommendCountPlus 에러")
+                it.onError(t)
+            }
+        })
+    }
+
+    // 좋아요 개수 (감소)
+    fun changeRecommendCountMinus(uuid: String) = Completable.create {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitUtil::class.java)
+
+        api.changeRecommendCountMinus(uuid).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val jsonObject = JSONObject(response.body().toString())
+                    if (jsonObject.optString("result").equals("true")) {
+                        it.onComplete()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e("BoardViewModel", "changeRecommendCountMinus 에러")
+                it.onError(t)
+            }
+        })
+    }
+
+    fun deleteBoardData(uuid: String, type: String) = Completable.create {
+        val retrofit = retrofitBuilder()
+        val api = retrofit.create(RetrofitUtil::class.java)
+
+        api.deleteBoardData(uuid, type).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val jsonObject = JSONObject(response.body().toString())
+                    if (jsonObject.optString("result").equals("true")) {
+                        it.onComplete()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Log.e("BoardViewModel", "deleteBoardData 에러")
                 it.onError(t)
             }
         })
